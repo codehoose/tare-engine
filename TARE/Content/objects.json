@@ -1,0 +1,44 @@
+{
+	"objects":
+	[
+		{
+			"slug": "sonic",
+			"name": "Sonic Screwdriver",
+			"description": "",
+			"initial": "",
+			"words": ["sonic", "screwdriver"]
+		},
+		{
+			"slug": "old-key",
+			"name": "A rusty old key",
+			"description": "",
+			"initial": "",
+			"words": ["old key", "key"]
+		},
+		{
+			"slug": "tardis-key",
+			"name": "The TARE key",
+			"description": "The TARE key",
+			"examine": "The key looks like it would fit a standard Yale lock",
+			"initial": "",
+			"words": ["key"]
+		},
+		{
+			"slug": "shovel",
+			"name": "A shovel",
+			"description": "",
+			"examine": "It's a fine road workers shovel with a wooden handle and the inscription 'Dave's shovel' engraved in it.",
+			"initial": "blocked-road",
+			"words": [ "shovel", "spade" ]
+		},
+		{
+			"slug": "sign-field",
+			"name": "A sign",
+			"description": "",
+			"examine": "The sign has seen better days but you can make out the text: 'Brown's Farm: 500 yds south'.'",
+			"initial": "gate-in-wall",
+			"flags":  [ "cannotcarry"],
+			"words": [ "sign" ]
+		}
+	]
+}

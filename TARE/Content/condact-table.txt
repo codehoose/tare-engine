@@ -1,0 +1,2 @@
+GO <DirectionWord> IF VALID DIRECTION -> Go<DirectionWord>
+<DirectionWord> _ IF VALID DIRECTION -> Go<DirectionWord>

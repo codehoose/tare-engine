@@ -1,0 +1,74 @@
+{
+  "startRoom": "outside-tardis",
+  "rooms": [
+    {
+      "slug": "tardis",
+      "short": "TARE control room",
+      "description": "This is the TARE control room",
+      "exits": {
+        "south": "outside-tardis"
+      }
+    },
+    {
+      "slug": "outside-tardis",
+      "short": "You are outside the TARE",
+      "graphic": [ "backgrounds/tardis-field" ],
+      "description": "The TARE is to the north",
+      "exits": {
+        "north": "tardis",
+        "east": "gate-in-wall"
+      },
+      "blockers": { "north": "tardis-key-held" }
+    },
+    {
+      "slug": "gate-in-wall",
+      "short": "Gate in a wall",
+      "description": "There is a gate in the wall",
+      "exits": {
+        "west": "outside-tardis",
+        "south": "path-to-farm-1"
+      }
+    },
+    {
+      "slug": "path-to-farm-1",
+      "graphic": [ "backgrounds/path-to-farm" ],
+      "short": "Path to farm house",
+      "description": "This is the path to the farm house",
+      "exits": {
+        "north": "gate-in-wall",
+        "south": "path-to-farm-2"
+      }
+    },
+    {
+      "slug": "path-to-farm-2",
+      "graphic": [ "backgrounds/path-to-farm" ],
+      "short": "Path to farm house",
+      "description": "This is the path to the farm house. The farm is to the east.",
+      "exits": {
+        "north": "path-to-farm-1",
+        "south": "blocked-road",
+        "east": "court-yard"
+      }
+    },
+    {
+      "slug": "blocked-road",
+      "graphic": [ "backgrounds/road-works", "backgrounds/road-works-no-shovel" ],
+      "graphicFlag": "shovel-held",
+      "short": "The road is blocked",
+      "description": "The road is blocked to the south",
+      "exits": {
+        "north": "path-to-farm-2"
+      }
+    },
+    {
+      "slug": "court-yard",
+      "short": "There is a farm here",
+      "description": "The farm is to the east, path to the west",
+      "exits": {
+        "east": "hall-way",
+        "west": "path-to-farm-2"
+      },
+      "blockers": { "east": "front-door-opened" }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "flags": [
+    {
+      "slug": "tardis-key-held",
+      "set": {
+        "location": "outside-tardis",
+        "verb": "examine",
+        "hint": "You will need to find the TARE key before you can enter.",
+        "text": "This hasn't been set up, but it's needed for the move north to work on first location",
+        "noun": "mat",
+        "carry": "tardis-key",
+        "type": "set"
+      }
+    },
+    {
+      "slug": "front-door-key-visible",
+      "set": {
+        "location": "court-yard",
+        "verb": "examine",
+        "noun": "mat",
+        "text": "You move the door mat over and find a key underneath it!",
+        "type": "set"
+      }
+    },
+    {
+      "slug": "front-door-opened",
+      "set": {
+        "location": "court-yard",
+        "verb": "use",
+        "noun": "key",
+        "carry": "key",
+        "type": "set"
+      }
+    },
+    {
+      "slug": "shovel-held",
+      "set": {
+        "location": "blocked-road",
+        "verb": "take",
+        "noun": "shovel",
+        "type": "set"
+      }
+    },
+    {
+      "slug": "shovel-held",
+      "set": {
+        "location": "blocked-road",
+        "verb": "drop",
+        "noun": "shovel",
+        "type": "reset"
+      }
+    }
+  ]
+}
