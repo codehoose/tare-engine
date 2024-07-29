@@ -45,7 +45,7 @@ namespace TARE
             {
                 if (!_engine.CurrentRoom.HasGraphic || _graphic == null) return;
                 _graphicPos.Y -= 32;
-                if (_graphicPos.Y < -_graphic.Height)
+                if (_graphicPos.Y < -_graphic.Height - 32)
                 {
                     ClearGraphic();
                 }

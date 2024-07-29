@@ -63,6 +63,7 @@
     {
       "slug": "court-yard",
       "short": "There is a farm here",
+      "graphic": ["backgrounds/farm-house"],
       "description": "The farm is to the east, path to the west",
       "exits": {
         "east": "hall-way",
