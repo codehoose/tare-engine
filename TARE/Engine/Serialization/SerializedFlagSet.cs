@@ -13,5 +13,6 @@ namespace TARE.Engine.Serialization
         public string flag;
         public string type;
         public string when;
+        public SerializedFlagTask[] tasks;
     }
 }

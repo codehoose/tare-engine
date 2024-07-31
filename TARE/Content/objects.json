@@ -8,19 +8,12 @@
 			"words": [ "sonic", "screwdriver" ]
 		},
 		{
-			"slug": "old-key",
-			"name": "A rusty old key",
-			"description": "",
-			"initial": "",
-			"words": [ "old key", "key" ]
-		},
-		{
 			"slug": "tardis-key",
 			"name": "The TARE key",
 			"description": "The TARE key",
 			"examine": "The key looks like it would fit a standard Yale lock",
 			"initial": "",
-			"words": [ "key" ]
+			"words": [ "tardiskey" ]
 		},
 		{
 			"slug": "shovel",
@@ -47,6 +40,13 @@
 			"initial": "court-yard",
 			"flags": [ "cannotcarry" ],
 			"words": [ "mat" ]
+		},
+		{
+			"slug": "door-key",
+			"name": "The front door key",
+			"description": "",
+			"examine": "It's a key that opens the farm's front door and nothing else.",
+			"words": [ "key" ]
 		}
 	]
 }

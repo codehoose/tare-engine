@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TARE.Engine.Flags;
@@ -52,8 +53,9 @@ namespace TARE.Engine
                 if (preCondition != null)
                 {
                     preCondition.Action();
+                    LastMessage = preCondition.Text;
+                    return result;
                 }
-                LastMessage = preCondition.Text;
             }
 
             if (result == ParserResult.Error && string.IsNullOrEmpty(LastError))
@@ -138,6 +140,11 @@ namespace TARE.Engine
         }
 
         internal bool FlagNonZero(string flag) => _flags.IsTruthy(flag);
+
+        internal Item GetItem(string itemSlug)
+        {
+            return _items.FirstOrDefault(i => i.Slug == itemSlug);
+        }
 
         internal string[] GetExits()
         {

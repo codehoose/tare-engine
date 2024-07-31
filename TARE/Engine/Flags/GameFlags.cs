@@ -1,6 +1,8 @@
-﻿using System;
+﻿using SharpDX.Direct3D11;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using TARE.Engine.Flags.Tasks;
 using TARE.Engine.Parser;
 using TARE.Engine.Serialization;
 
@@ -68,6 +70,19 @@ namespace TARE.Engine.Flags
 
         private void AddConditions(string slug, SerializedFlagSet set)
         {
+            Action tasks = null;
+            if (set.tasks != null && set.tasks.Length > 0)
+            {
+                foreach (var t in set.tasks)
+                {
+                    switch (t.type)
+                    {
+                        case "drop": tasks += new DropItemTask(_engine, t.argument).Do;
+                            break;
+                    }
+                }
+            }
+
             Action action = null;
             var type = string.IsNullOrEmpty(set.type) ? "set" : set.type;
             switch(set.type)
@@ -79,6 +94,8 @@ namespace TARE.Engine.Flags
                     action = () => _flags[slug] = 0;
                     break;
             }
+
+            if (tasks != null) action += tasks;
 
             List<IFlagCondition> conditions = new List<IFlagCondition>();
             if (!string.IsNullOrEmpty(set.location)) conditions.Add(new LocationCondition(set.location, _engine));

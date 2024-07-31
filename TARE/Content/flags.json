@@ -20,7 +20,13 @@
         "flag": "!front-door-key-hidden",
         "text": "The mat has 'WELCOME' written in large friendly letters. As you look closer you notice a key sticking out the right hand edge!",
         "type": "set",
-        "when": "pre"
+        "when": "pre",
+        "tasks": [
+          {
+            "type": "drop",
+            "argument": "door-key"
+          }
+        ]
       }
     },
     {
