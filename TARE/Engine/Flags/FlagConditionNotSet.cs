@@ -3,12 +3,12 @@ using TARE.Engine.Parser;
 
 namespace TARE.Engine.Flags
 {
-    internal class FlagConditionSet : IFlagCondition
+    internal class FlagConditionNotSet : IFlagCondition
     {
         private readonly GameFlags _flags;
         private readonly string _flagName;
 
-        public FlagConditionSet(GameFlags flags, string flagName)
+        public FlagConditionNotSet(GameFlags flags, string flagName)
         {
             _flags = flags;
             _flagName = flagName;
@@ -16,7 +16,7 @@ namespace TARE.Engine.Flags
 
         public bool IsMatch(IEnumerable<Word> input)
         {
-            return _flags.IsTruthy(_flagName);
+            return !_flags.IsTruthy(_flagName);
         }
     }
 }

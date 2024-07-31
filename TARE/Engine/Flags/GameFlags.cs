@@ -10,7 +10,8 @@ namespace TARE.Engine.Flags
     {
         private readonly Dictionary<string, int> _flags = new();
         private readonly TareEngine _engine;
-        private readonly List<IFlagConditionSet> _setConditions = new();
+        private readonly List<IConditionAction> _preConditions = new();
+        private readonly List<IConditionAction> _setConditions = new();
 
         public bool IsTruthy(string flagName)
         {
@@ -24,9 +25,9 @@ namespace TARE.Engine.Flags
             return value;
         }
 
-        public string GetHint(string flagName)
+        public string GetText(string flagName)
         {
-            return _setConditions.FirstOrDefault(s => s.Slug == flagName)?.Hint;
+            return _setConditions.FirstOrDefault(s => s.Slug == flagName)?.Text;
         }
 
         public void Run(IEnumerable<Word> words)
@@ -35,6 +36,17 @@ namespace TARE.Engine.Flags
             {
                 if (cond.IsMatch(words)) cond.Action();
             }
+        }
+
+        public bool TryGetPreCondition(IEnumerable<Word> words, out IConditionAction condition)
+        {
+            condition = null;
+            foreach (var cond in _preConditions)
+            {
+                if (cond.IsMatch(words)) condition = cond;
+            }
+
+            return condition is not null;
         }
 
         public GameFlags(TareEngine engine)
@@ -73,9 +85,32 @@ namespace TARE.Engine.Flags
             if (!string.IsNullOrEmpty(set.verb)) conditions.Add(new WordMatchCondition(_engine.Parser.Dictionary.FindWord(set.verb)));
             if (!string.IsNullOrEmpty(set.noun)) conditions.Add(new WordMatchCondition(_engine.Parser.Dictionary.FindWord(set.noun)));
             if (!string.IsNullOrEmpty(set.carry)) conditions.Add(new CarryCondition(set.carry, _engine));
+            if (!string.IsNullOrEmpty(set.flag)) AddFlagCondition(conditions, set.flag);
 
-            var cond = new FlagConditionSet(slug, set.text, set.hint, conditions, action);
-            _setConditions.Add(cond);
+            var cond = new ConditionAction(slug, set.text, conditions, action);
+            if (set.when == "pre")
+            {
+                _preConditions.Add(cond);
+            }
+            else
+            {
+                _setConditions.Add(cond);
+            }
+        }
+
+        private void AddFlagCondition(List<IFlagCondition> conditions, string flag)
+        {
+            bool isNotSetTest = flag.StartsWith('!');
+            string flagName = isNotSetTest ? flag.Substring(1) : flag;
+
+            if (isNotSetTest)
+            {
+                conditions.Add(new FlagConditionNotSet(this, flagName));
+            }
+            else
+            {
+                conditions.Add(new FlagConditionSet(this, flagName));
+            }
         }
     }
 }

@@ -45,6 +45,17 @@ namespace TARE.Engine
 
             List<Word> tokens = new List<Word>();
             ParserResult result = _parser.Parse(input, out tokens);
+
+            // Run through preconditions
+            if (_flags.TryGetPreCondition(tokens, out var preCondition))
+            {
+                if (preCondition != null)
+                {
+                    preCondition.Action();
+                }
+                LastMessage = preCondition.Text;
+            }
+
             if (result == ParserResult.Error && string.IsNullOrEmpty(LastError))
             {
                 LastError = "I don't know what that means!";
@@ -148,7 +159,7 @@ namespace TARE.Engine
             {
                 if (direction != null)
                 {
-                    LastError = _flags.GetHint(direction.Blocked) ?? "You can't go that way!";
+                    LastError = _flags.GetText(direction.Blocked) ?? "You can't go that way!";
                 }
                 else
                 {

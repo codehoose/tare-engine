@@ -10,7 +10,8 @@ namespace TARE.Engine.Serialization
         public string noun;
         public string text;
         public string carry;
+        public string flag;
         public string type;
-        public string hint;
+        public string when;
     }
 }

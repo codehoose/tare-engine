@@ -1,19 +1,18 @@
 {
-	"objects":
-	[
+	"objects": [
 		{
 			"slug": "sonic",
 			"name": "Sonic Screwdriver",
 			"description": "",
 			"initial": "",
-			"words": ["sonic", "screwdriver"]
+			"words": [ "sonic", "screwdriver" ]
 		},
 		{
 			"slug": "old-key",
 			"name": "A rusty old key",
 			"description": "",
 			"initial": "",
-			"words": ["old key", "key"]
+			"words": [ "old key", "key" ]
 		},
 		{
 			"slug": "tardis-key",
@@ -21,7 +20,7 @@
 			"description": "The TARE key",
 			"examine": "The key looks like it would fit a standard Yale lock",
 			"initial": "",
-			"words": ["key"]
+			"words": [ "key" ]
 		},
 		{
 			"slug": "shovel",
@@ -37,8 +36,17 @@
 			"description": "",
 			"examine": "The sign has seen better days but you can make out the text: 'Brown's Farm: 500 yds south'.'",
 			"initial": "gate-in-wall",
-			"flags":  [ "cannotcarry"],
+			"flags": [ "cannotcarry" ],
 			"words": [ "sign" ]
+		},
+		{
+			"slug": "door-mat",
+			"name": "A door mat",
+			"description": "",
+			"examine": "The mat has 'WELCOME' written on it in large letters. There is signs of wear and tear along the edges.",
+			"initial": "court-yard",
+			"flags": [ "cannotcarry" ],
+			"words": [ "mat" ]
 		}
 	]
 }

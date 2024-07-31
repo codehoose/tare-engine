@@ -5,21 +5,22 @@
       "set": {
         "location": "outside-tardis",
         "verb": "examine",
-        "hint": "You will need to find the TARE key before you can enter.",
-        "text": "This hasn't been set up, but it's needed for the move north to work on first location",
+        "text": "You will need to find the TARE key before you can enter.",
         "noun": "mat",
         "carry": "tardis-key",
         "type": "set"
       }
     },
     {
-      "slug": "front-door-key-visible",
+      "slug": "front-door-key-hidden",
       "set": {
         "location": "court-yard",
         "verb": "examine",
         "noun": "mat",
-        "text": "You move the door mat over and find a key underneath it!",
-        "type": "set"
+        "flag": "!front-door-key-hidden",
+        "text": "The mat has 'WELCOME' written in large friendly letters. As you look closer you notice a key sticking out the right hand edge!",
+        "type": "set",
+        "when": "pre"
       }
     },
     {
