@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace TARE.Engine.Parser
 {
-    internal class WordCollection<T> where T: Word
+    internal class WordCollection<T> : IEnumerable<Word> where T: Word
     {
         public static string NotFound = nameof(NotFound);
         private readonly List<T> _word = new List<T>();
@@ -22,6 +23,16 @@ namespace TARE.Engine.Parser
         public Word Find(string word)
         {
             return _word.FirstOrDefault(w => w.IsMatch(word));
+        }
+
+        public IEnumerator<Word> GetEnumerator()
+        {
+            return _word.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

@@ -24,7 +24,7 @@
             dictionary.Verbs.Add(new VerbWord("Look"));
 
             // Take
-            dictionary.Verbs.Add(new VerbWord("Take", "Get", "Grab"));
+            dictionary.Verbs.Add(new VerbWord("Take", "Get", "Grab", "Pick Up"));
 
             // Inventory
             dictionary.Verbs.Add(new VerbWord("Inventory", "I"));

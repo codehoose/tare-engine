@@ -9,6 +9,11 @@ namespace TARE
 {
     public class Game1 : Game
     {
+        const int FONT_WIDTH = 18;
+        const int FONT_HEIGHT = 32;
+        const int SCREEN_ROWS = 25;
+        const int SCREEN_COLS = 80;
+
         private TareGameState _state;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -35,22 +40,22 @@ namespace TARE
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _font = new SpriteSheet(Content.Load<Texture2D>("font/ibm-font-large"), 16, 32);
+            _font = new SpriteSheet(Content.Load<Texture2D>("font/ibm-font-large"), FONT_WIDTH, FONT_HEIGHT);
             _engine = new TareEngine();
             _engine.Init();
 
             _state = TareGameState.DescribeRoom;
-            _term = new Terminal(_spriteBatch, _font, 80, 24, Point.Zero);
+            _term = new Terminal(_spriteBatch, _font, SCREEN_COLS, SCREEN_ROWS - 1, Point.Zero);
             _term.Scrolled += (o, e) =>
             {
                 if (!_engine.CurrentRoom.HasGraphic || _graphic == null) return;
-                _graphicPos.Y -= 32;
-                if (_graphicPos.Y < -_graphic.Height - 32)
+                _graphicPos.Y -= _font.CellHeight;
+                if (_graphicPos.Y < -_graphic.Height - _font.CellHeight)
                 {
                     ClearGraphic();
                 }
             };
-            _input = new Terminal(_spriteBatch, _font, 80, 1, new Point(0, 24 * 32));
+            _input = new Terminal(_spriteBatch, _font, 80, 1, new Point(0, 24 * _font.CellHeight));
             _keyboardBuffer = new KeyboardBuffer();
             _keyboardBuffer.TextEntered += (o, e) =>
             {
@@ -95,8 +100,8 @@ namespace TARE
             };
             _keyboardBuffer.CharacterEntered += (o, e) => _input.Write(e.ToString());
 
-            _graphics.PreferredBackBufferWidth = 1280;
-            _graphics.PreferredBackBufferHeight = 800;
+            _graphics.PreferredBackBufferWidth = SCREEN_COLS * FONT_WIDTH;
+            _graphics.PreferredBackBufferHeight = SCREEN_ROWS * FONT_HEIGHT;
             _graphics.ApplyChanges();
         }
 

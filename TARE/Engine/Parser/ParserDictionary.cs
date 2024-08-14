@@ -1,10 +1,15 @@
-﻿namespace TARE.Engine.Parser
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace TARE.Engine.Parser
 {
     internal class ParserDictionary
     {
         public WordCollection<DirectionWord> Directions { get; set; } = new WordCollection<DirectionWord>();
         public WordCollection<VerbWord> Verbs { get; set; } = new WordCollection<VerbWord>();
         public WordCollection<NounWord> Nouns { get; set; } = new WordCollection<NounWord>();
+
+        public IEnumerable<Word> GetEnumerator() => Directions.Concat(Verbs).Concat(Nouns);
 
         public Word FindWord(string word)
         {

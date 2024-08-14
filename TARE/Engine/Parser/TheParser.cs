@@ -18,8 +18,42 @@ namespace TARE.Engine.Parser
 
         public Word FindWord(string word) => _dictionary.FindWord(word);
 
+        private IEnumerable<Word> CreateWords(string[] words)
+        {
+            return words.Select(word => new Word(word));
+        }
+
         public ParserResult Parse(string input, out List<Word> tokens)
         {
+            // Really what we should do is parse common words...
+            // foreach word in dictionary
+            // parse string
+            // if found, 
+
+            //var wordles = input.Trim().Split(" ", System.StringSplitOptions.RemoveEmptyEntries)
+            //    .Select(w => new UnknownWord(w))
+            //    .ToList();
+
+            //foreach (var word in _dictionary.GetEnumerator())
+            //{
+            //    var wordInstances = new string[] { word.Primary }.Concat(word.Secondaries)
+            //        .Select(w => w.Split(' ', System.StringSplitOptions.RemoveEmptyEntries))
+            //        .ToArray();
+
+            //    foreach (var wordPhrase in wordInstances)
+            //    {
+            //        for (int i = 0; i < wordles.Count; i++)
+            //        {
+
+            //        }
+            //    }
+
+
+            //}
+
+
+
+
             var words = input.Trim().Split(' ', System.StringSplitOptions.RemoveEmptyEntries)
                 .Select(_dictionary.FindWord)
                 .Where(IsValidWord)
