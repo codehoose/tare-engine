@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SharpDX.MediaFoundation;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace TARE.Engine.Parser
@@ -25,50 +26,39 @@ namespace TARE.Engine.Parser
 
         public ParserResult Parse(string input, out List<Word> tokens)
         {
-            // Really what we should do is parse common words...
-            // foreach word in dictionary
-            // parse string
-            // if found, 
+            // Tokenize the input and remove the filler words like 'the' and 'a'
+            var words = input.Split(" ", System.StringSplitOptions.RemoveEmptyEntries)
+                              .Where(w => _dictionary.FindWord(w) is not FillerWord)
+                              .ToList();
 
-            //var wordles = input.Trim().Split(" ", System.StringSplitOptions.RemoveEmptyEntries)
-            //    .Select(w => new UnknownWord(w))
-            //    .ToList();
-
-            //foreach (var word in _dictionary.GetEnumerator())
-            //{
-            //    var wordInstances = new string[] { word.Primary }.Concat(word.Secondaries)
-            //        .Select(w => w.Split(' ', System.StringSplitOptions.RemoveEmptyEntries))
-            //        .ToArray();
-
-            //    foreach (var wordPhrase in wordInstances)
-            //    {
-            //        for (int i = 0; i < wordles.Count; i++)
-            //        {
-
-            //        }
-            //    }
-
-
-            //}
-
-
-
-
-            var words = input.Trim().Split(' ', System.StringSplitOptions.RemoveEmptyEntries)
-                .Select(_dictionary.FindWord)
-                .Where(IsValidWord)
-                .ToList();
-
-            tokens = words;
-
-            if (words.Count(w => w is InvalidWord) > 0) return ParserResult.Error;
-
-            if (words.Count == 0) return ParserResult.Error;
-            if (words.Count == 1) return _engine.PatternMatch(words[0], null);
-
-            if (words.Count >= 0 && words.Count <= 2)
+            // find the double words
+            int index = 0;
+            while(index < words.Count)
             {
-                return _engine.PatternMatch(words[0], words[1]);
+                if (index == words.Count) break;
+                var tmp = index < words.Count - 1 ? $"{words[index]} {words[index + 1]}" : words[index];
+                var word = _dictionary.FindWord(tmp);
+                if (word != null && word is not InvalidWord)
+                {
+                    if (index < words.Count) words.RemoveAt(index);
+                    if (index < words.Count) words.RemoveAt(index);
+                    words.Insert(index, word.Primary);
+                }
+                index++;
+            }
+
+            tokens = words.Select(_dictionary.FindWord)
+                          .Where(IsValidWord)
+                          .ToList();
+
+            if (tokens.Count(w => w is InvalidWord) > 0) return ParserResult.Error;
+
+            if (tokens.Count == 0) return ParserResult.Error;
+            if (tokens.Count == 1) return _engine.PatternMatch(tokens[0], null);
+
+            if (tokens.Count >= 0 && tokens.Count <= 2)
+            {
+                return _engine.PatternMatch(tokens[0], tokens[1]);
             }
 
             return ParserResult.Error;

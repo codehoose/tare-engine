@@ -39,7 +39,7 @@
 			"examine": "The mat has 'WELCOME' written on it in large letters. There is signs of wear and tear along the edges.",
 			"initial": "court-yard",
 			"flags": [ "cannotcarry" ],
-			"words": [ "mat" ]
+			"words": [ "mat", "door mat" ]
 		},
 		{
 			"slug": "door-key",

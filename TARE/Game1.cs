@@ -13,6 +13,8 @@ namespace TARE
         const int FONT_HEIGHT = 32;
         const int SCREEN_ROWS = 25;
         const int SCREEN_COLS = 80;
+        const int SCREEN_WIDTH = SCREEN_COLS * FONT_WIDTH;
+        const int SCREEN_HEIGHT = SCREEN_ROWS * FONT_HEIGHT;
 
         private TareGameState _state;
         private GraphicsDeviceManager _graphics;
@@ -100,8 +102,8 @@ namespace TARE
             };
             _keyboardBuffer.CharacterEntered += (o, e) => _input.Write(e.ToString());
 
-            _graphics.PreferredBackBufferWidth = SCREEN_COLS * FONT_WIDTH;
-            _graphics.PreferredBackBufferHeight = SCREEN_ROWS * FONT_HEIGHT;
+            _graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
+            _graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
             _graphics.ApplyChanges();
         }
 
@@ -138,7 +140,7 @@ namespace TARE
             _term.Draw(gameTime);
             if (_engine.CurrentRoom.HasGraphic && _graphic != null)
             {
-                var rect = new Rectangle(_graphicPos, new Point(1280, 400));
+                var rect = new Rectangle(_graphicPos, new Point(SCREEN_WIDTH, 400));
                 _spriteBatch.Draw(_graphic, rect, Color.White);
             }
             _input.Draw(gameTime);

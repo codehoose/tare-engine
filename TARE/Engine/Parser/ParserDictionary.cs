@@ -5,11 +5,12 @@ namespace TARE.Engine.Parser
 {
     internal class ParserDictionary
     {
-        public WordCollection<DirectionWord> Directions { get; set; } = new WordCollection<DirectionWord>();
-        public WordCollection<VerbWord> Verbs { get; set; } = new WordCollection<VerbWord>();
-        public WordCollection<NounWord> Nouns { get; set; } = new WordCollection<NounWord>();
+        public WordCollection<DirectionWord> Directions { get; set; } = new();
+        public WordCollection<VerbWord> Verbs { get; set; } = new();
+        public WordCollection<NounWord> Nouns { get; set; } = new();
+        public WordCollection<FillerWord> Fillers { get; set; } = new();
 
-        public IEnumerable<Word> GetEnumerator() => Directions.Concat(Verbs).Concat(Nouns);
+        public IEnumerable<Word> GetEnumerator() => Directions.Concat(Verbs).Concat(Nouns).Concat(Fillers);
 
         public Word FindWord(string word)
         {
@@ -21,6 +22,9 @@ namespace TARE.Engine.Parser
 
             var noun = Nouns.Find(word);
             if (noun != null) return noun;
+
+            var filler = Fillers.Find(word);
+            if (filler != null) return filler;
 
             return new InvalidWord(word);
         }
