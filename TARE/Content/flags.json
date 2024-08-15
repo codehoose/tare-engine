@@ -40,6 +40,16 @@
       }
     },
     {
+      "slug": "front-door-opened",
+      "set": {
+        "location": "court-yard",
+        "verb": "open",
+        "noun": "door",
+        "carry": "key",
+        "type": "set"
+      }
+    },
+    {
       "slug": "shovel-held",
       "set": {
         "location": "blocked-road",

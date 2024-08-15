@@ -205,7 +205,7 @@ namespace TARE
         {
             if (_engine.CurrentRoom.Items.Count == 0) return;
             _term.Write("You can see: ");
-            var items = _engine.CurrentRoom.Items.Select(i => i.Name).ToArray();
+            var items = _engine.CurrentRoom.Items.Where(i => (i.Flags & Engine.Models.ObjectFlags.Hidden) != Engine.Models.ObjectFlags.Hidden ).Select(i => i.Name).ToArray();
             _term.WriteLine(GetJoined(items));
         }
 

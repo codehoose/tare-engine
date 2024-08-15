@@ -13,7 +13,7 @@
       "slug": "outside-tardis",
       "short": "You are outside the TARE",
       "graphic": [ "backgrounds/tardis-field" ],
-      "description": "The TARE is to the north",
+      "description": "You are in a wheat field. The large blue box that you arrived in is to the north. To the east is an open gate and a road.",
       "exits": {
         "north": "tardis",
         "east": "gate-in-wall"
@@ -23,7 +23,7 @@
     {
       "slug": "gate-in-wall",
       "short": "Gate in a wall",
-      "description": "There is a gate in the wall",
+      "description": "The wooden gate is crumbling and a couple of the horizontal bars are ready to snap. To the west is the TARDIS, to the south is more road.",
       "exits": {
         "west": "outside-tardis",
         "south": "path-to-farm-1"
@@ -33,7 +33,7 @@
       "slug": "path-to-farm-1",
       "graphic": [ "backgrounds/path-to-farm" ],
       "short": "Path to farm house",
-      "description": "This is the path to the farm house",
+      "description": "The road is straight in a north south kind of way. There's a field to the north and more road to the south.",
       "exits": {
         "north": "gate-in-wall",
         "south": "path-to-farm-2"
@@ -43,7 +43,7 @@
       "slug": "path-to-farm-2",
       "graphic": [ "backgrounds/path-to-farm" ],
       "short": "Path to farm house",
-      "description": "This is the path to the farm house. The farm is to the east.",
+      "description": "You're probably half way to the town now. Maybe a little more than a kilometre to the south. Unfortunately it looks like road works ahead. To the east is a quaint looking cottage farm house.",
       "exits": {
         "north": "path-to-farm-1",
         "south": "blocked-road",
@@ -55,7 +55,7 @@
       "graphic": [ "backgrounds/road-works", "backgrounds/road-works-no-shovel" ],
       "graphicFlag": "shovel-held",
       "short": "The road is blocked",
-      "description": "The road is blocked to the south",
+      "description": "Whatever road works happened here have stopped. The workers have long since stopped working. It looks like they're on a break. Probably in the local town to the south. Unfortunately, that way is blocked for you.",
       "exits": {
         "north": "path-to-farm-2"
       }
@@ -64,7 +64,7 @@
       "slug": "court-yard",
       "short": "There is a farm here",
       "graphic": ["backgrounds/farm-house"],
-      "description": "The farm is to the east, path to the west",
+      "description": "The quaint cottage lies to the east in front of you. It's red roof and adobe walls give it a surreal appearance in the Welsh countryside.",
       "exits": {
         "east": "hall-way",
         "west": "path-to-farm-2"

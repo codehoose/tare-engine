@@ -47,6 +47,15 @@
 			"description": "",
 			"examine": "It's a key that opens the farm's front door and nothing else.",
 			"words": [ "key" ]
+		},
+		{
+			"slug": "door",
+			"name": "The front door",
+			"initial": "court-yard",
+			"description": "",
+			"flags": [ "cannotcarry", "hidden" ],
+			"examine": "The door is red and has a letter box, a knob and a lock. You'll need a key for the lock.",
+			"words": [ "door", "front door", "red door" ]
 		}
 	]
 }
