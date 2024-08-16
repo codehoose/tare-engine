@@ -2,8 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
-using TARE.Engine;
-using TARE.Engine.Parser;
+using TareEngine;
+using TareEngine.Models;
+using TareEngine.Parser;
 
 namespace TARE
 {
@@ -21,7 +22,7 @@ namespace TARE
         private SpriteBatch _spriteBatch;
         private SpriteSheet _font;
         private Texture2D _graphic;
-        private TareEngine _engine;
+        private Engine _engine;
         private Terminal _term;
         private Terminal _input;
         private KeyboardBuffer _keyboardBuffer;
@@ -43,7 +44,7 @@ namespace TARE
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _font = new SpriteSheet(Content.Load<Texture2D>("font/ibm-font-large"), FONT_WIDTH, FONT_HEIGHT);
-            _engine = new TareEngine();
+            _engine = new Engine();
             _engine.Init();
 
             _state = TareGameState.DescribeRoom;
@@ -205,7 +206,7 @@ namespace TARE
         {
             if (_engine.CurrentRoom.Items.Count == 0) return;
             _term.Write("You can see: ");
-            var items = _engine.CurrentRoom.Items.Where(i => (i.Flags & Engine.Models.ObjectFlags.Hidden) != Engine.Models.ObjectFlags.Hidden ).Select(i => i.Name).ToArray();
+            var items = _engine.CurrentRoom.Items.Where(i => (i.Flags & ObjectFlags.Hidden) != ObjectFlags.Hidden ).Select(i => i.Name).ToArray();
             _term.WriteLine(GetJoined(items));
         }
 

@@ -21,6 +21,9 @@
     <Folder Include="Content\font\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TareEngine\TareEngine.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="Content\flags.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

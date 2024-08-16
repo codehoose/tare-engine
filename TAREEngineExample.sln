@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TareExample", "TARE\TareExample.csproj", "{E720019B-71CD-4BC1-805D-2EEBB4D1889C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TareEngine", "TareEngine\TareEngine.csproj", "{4BD3FBAD-3951-41DB-8DB9-1F4CB33ED81C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E720019B-71CD-4BC1-805D-2EEBB4D1889C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E720019B-71CD-4BC1-805D-2EEBB4D1889C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E720019B-71CD-4BC1-805D-2EEBB4D1889C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BD3FBAD-3951-41DB-8DB9-1F4CB33ED81C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BD3FBAD-3951-41DB-8DB9-1F4CB33ED81C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BD3FBAD-3951-41DB-8DB9-1F4CB33ED81C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BD3FBAD-3951-41DB-8DB9-1F4CB33ED81C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
