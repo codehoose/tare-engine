@@ -9,7 +9,12 @@ namespace TareEngine.Serialization
         public static SerializedGameData? GetData(string jsonFile)
         {
             var path = Path.Combine(Content, jsonFile);
-            var json = File.ReadAllText(path);
+            return GetDataFullPath(path);
+        }
+
+        public static SerializedGameData? GetDataFullPath(string jsonFile)
+        {
+            var json = File.ReadAllText(jsonFile);
             return JsonConvert.DeserializeObject<SerializedGameData>(json);
         }
     }
