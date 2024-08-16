@@ -24,13 +24,7 @@
     <ProjectReference Include="..\TareEngine\TareEngine.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Content\flags.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\objects.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\rooms.json">
+    <None Update="Content\thedata.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

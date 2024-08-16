@@ -30,9 +30,10 @@ namespace TareEngine
 
         public void Init()
         {
-            LoadRooms();
-            LoadItems();
-            LoadFlags();
+            var gameData = GameDataSerializer.GetData("thedata.json");
+            LoadRooms(gameData.rooms);
+            LoadItems(gameData.items);
+            LoadFlags(gameData.flags);
             MakeMatches();
         }
 
@@ -89,10 +90,9 @@ namespace TareEngine
             _actions.Add(new MatchAction(new NullWorldMatch(), new WordTypeMatch<DirectionWord>(), list => ParserResult.Error));
         }
 
-        private void LoadRooms()
+        private void LoadRooms(SerializedRoomCollection rooms)
         {
-            var rooms = RoomsSerializer.ReadRooms("rooms.json");
-            foreach(var room in rooms.rooms.Select(CreateRoom))
+            foreach (var room in rooms.rooms.Select(CreateRoom))
             {
                 _rooms.Add(room.Slug, room);
             }
@@ -100,15 +100,14 @@ namespace TareEngine
             CurrentRoom = string.IsNullOrEmpty(rooms.startRoom) ? _rooms.Values.FirstOrDefault() : _rooms[rooms.startRoom];
         }
 
-        private void LoadFlags()
+        private void LoadFlags(SerializedFlag[] flags)
         {
-            _flags = new GameFlags(this);
+            _flags = new GameFlags(this, flags);
         }
 
-        private void LoadItems()
+        private void LoadItems(SerializedItem[] items)
         {
-            var items = ItemsSerializer.ReadItems("objects.json");
-            foreach (var item in items.objects)
+            foreach (var item in items)
             {
                 var tmp = new Item(item.slug, item.description, item.examine, item.name, item.words, item.flags);
                 if (!string.IsNullOrEmpty(item.initial))

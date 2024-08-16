@@ -47,16 +47,15 @@ namespace TareEngine.Flags
             return condition is not null;
         }
 
-        public GameFlags(Engine engine)
+        public GameFlags(Engine engine, SerializedFlag[] flags)
         {
             _engine = engine;
-            LoadFlags();
+            LoadFlags(flags);
         }
 
-        private void LoadFlags()
+        private void LoadFlags(SerializedFlag[] flags)
         {
-            var flags = FlagsSerializer.ReadFlags("flags.json");
-            foreach (var flag in flags.flags)
+            foreach (var flag in flags)
             {
                 // Can be duplicates because the slug can appear for TAKE X and DROP X
                 _flags.TryAdd(flag.slug, 0);

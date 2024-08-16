@@ -2,15 +2,15 @@
 
 namespace TareEngine.Serialization
 {
-    internal static class ItemsSerializer
+    public class GameDataSerializer
     {
         private static readonly string Content = nameof(Content);
 
-        public static SerializedItemsCollection? ReadItems(string jsonFile)
+        public static SerializedGameData? GetData(string jsonFile)
         {
             var path = Path.Combine(Content, jsonFile);
             var json = File.ReadAllText(path);
-            return JsonConvert.DeserializeObject<SerializedItemsCollection>(json);
+            return JsonConvert.DeserializeObject<SerializedGameData>(json);
         }
     }
 }

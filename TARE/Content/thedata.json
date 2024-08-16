@@ -1,0 +1,207 @@
+{
+  "rooms": {
+    "startRoom": "outside-tardis",
+    "rooms": [
+      {
+        "slug": "tardis",
+        "short": "TARE control room",
+        "description": "This is the TARE control room",
+        "exits": {
+          "south": "outside-tardis"
+        }
+      },
+      {
+        "slug": "outside-tardis",
+        "short": "You are outside the TARE",
+        "graphic": [ "backgrounds/tardis-field" ],
+        "description": "You are in a wheat field. The large blue box that you arrived in is to the north. To the east is an open gate and a road.",
+        "exits": {
+          "north": "tardis",
+          "east": "gate-in-wall"
+        },
+        "blockers": { "north": "tardis-key-held" }
+      },
+      {
+        "slug": "gate-in-wall",
+        "short": "Gate in a wall",
+        "description": "The wooden gate is crumbling and a couple of the horizontal bars are ready to snap. To the west is the TARDIS, to the south is more road.",
+        "exits": {
+          "west": "outside-tardis",
+          "south": "path-to-farm-1"
+        }
+      },
+      {
+        "slug": "path-to-farm-1",
+        "graphic": [ "backgrounds/path-to-farm" ],
+        "short": "Path to farm house",
+        "description": "The road is straight in a north south kind of way. There's a field to the north and more road to the south.",
+        "exits": {
+          "north": "gate-in-wall",
+          "south": "path-to-farm-2"
+        }
+      },
+      {
+        "slug": "path-to-farm-2",
+        "graphic": [ "backgrounds/path-to-farm" ],
+        "short": "Path to farm house",
+        "description": "You're probably half way to the town now. Maybe a little more than a kilometre to the south. Unfortunately it looks like road works ahead. To the east is a quaint looking cottage farm house.",
+        "exits": {
+          "north": "path-to-farm-1",
+          "south": "blocked-road",
+          "east": "court-yard"
+        }
+      },
+      {
+        "slug": "blocked-road",
+        "graphic": [ "backgrounds/road-works", "backgrounds/road-works-no-shovel" ],
+        "graphicFlag": "shovel-held",
+        "short": "The road is blocked",
+        "description": "Whatever road works happened here have stopped. The workers have long since stopped working. It looks like they're on a break. Probably in the local town to the south. Unfortunately, that way is blocked for you.",
+        "exits": {
+          "north": "path-to-farm-2"
+        }
+      },
+      {
+        "slug": "court-yard",
+        "short": "There is a farm here",
+        "graphic": [ "backgrounds/farm-house" ],
+        "description": "The quaint cottage lies to the east in front of you. It's red roof and adobe walls give it a surreal appearance in the Welsh countryside.",
+        "exits": {
+          "east": "hall-way",
+          "west": "path-to-farm-2"
+        },
+        "blockers": { "east": "front-door-opened" }
+      }
+    ]
+  },
+
+  "items": [
+    {
+      "slug": "sonic",
+      "name": "Sonic Screwdriver",
+      "description": "",
+      "initial": "",
+      "words": [ "sonic", "screwdriver" ]
+    },
+    {
+      "slug": "tardis-key",
+      "name": "The TARE key",
+      "description": "The TARE key",
+      "examine": "The key looks like it would fit a standard Yale lock",
+      "initial": "",
+      "words": [ "tardiskey" ]
+    },
+    {
+      "slug": "shovel",
+      "name": "A shovel",
+      "description": "",
+      "examine": "It's a fine road workers shovel with a wooden handle and the inscription 'Dave's shovel' engraved in it.",
+      "initial": "blocked-road",
+      "words": [ "shovel", "spade" ]
+    },
+    {
+      "slug": "sign-field",
+      "name": "A sign",
+      "description": "",
+      "examine": "The sign has seen better days but you can make out the text: 'Brown's Farm: 500 yds south'.'",
+      "initial": "gate-in-wall",
+      "flags": [ "cannotcarry" ],
+      "words": [ "sign" ]
+    },
+    {
+      "slug": "door-mat",
+      "name": "A door mat",
+      "description": "",
+      "examine": "The mat has 'WELCOME' written on it in large letters. There is signs of wear and tear along the edges.",
+      "initial": "court-yard",
+      "flags": [ "cannotcarry" ],
+      "words": [ "mat", "door mat" ]
+    },
+    {
+      "slug": "door-key",
+      "name": "The front door key",
+      "description": "",
+      "examine": "It's a key that opens the farm's front door and nothing else.",
+      "words": [ "key" ]
+    },
+    {
+      "slug": "door",
+      "name": "The front door",
+      "initial": "court-yard",
+      "description": "",
+      "flags": [ "cannotcarry", "hidden" ],
+      "examine": "The door is red and has a letter box, a knob and a lock. You'll need a key for the lock.",
+      "words": [ "door", "front door", "red door" ]
+    }
+  ],
+
+  "flags": [
+    {
+      "slug": "tardis-key-held",
+      "set": {
+        "location": "outside-tardis",
+        "verb": "examine",
+        "text": "You will need to find the TARE key before you can enter.",
+        "noun": "mat",
+        "carry": "tardis-key",
+        "type": "set"
+      }
+    },
+    {
+      "slug": "front-door-key-hidden",
+      "set": {
+        "location": "court-yard",
+        "verb": "examine",
+        "noun": "mat",
+        "flag": "!front-door-key-hidden",
+        "text": "The mat has 'WELCOME' written in large friendly letters. As you look closer you notice a key sticking out the right hand edge!",
+        "type": "set",
+        "when": "pre",
+        "tasks": [
+          {
+            "type": "drop",
+            "argument": "door-key"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "front-door-opened",
+      "set": {
+        "location": "court-yard",
+        "verb": "use",
+        "noun": "key",
+        "carry": "key",
+        "type": "set"
+      }
+    },
+    {
+      "slug": "front-door-opened",
+      "set": {
+        "location": "court-yard",
+        "verb": "open",
+        "noun": "door",
+        "carry": "key",
+        "type": "set"
+      }
+    },
+    {
+      "slug": "shovel-held",
+      "set": {
+        "location": "blocked-road",
+        "verb": "take",
+        "noun": "shovel",
+        "type": "set"
+      }
+    },
+    {
+      "slug": "shovel-held",
+      "set": {
+        "location": "blocked-road",
+        "verb": "drop",
+        "noun": "shovel",
+        "type": "reset"
+      }
+    }
+  ]
+}
