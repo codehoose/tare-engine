@@ -52,6 +52,7 @@ namespace TareEngine
                 {
                     preCondition.Action();
                     LastMessage = preCondition.Text;
+                    _flags.Increment(GameFlags.PlayerMoveCount);
                     return result;
                 }
             }
@@ -64,6 +65,8 @@ namespace TareEngine
             {
                 Flags.Run(tokens);
             }
+
+            _flags.Increment(GameFlags.PlayerMoveCount);
             return result;
         }
 
@@ -77,6 +80,7 @@ namespace TareEngine
 
             // Examine
             _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("EXAMINE")), new WordTypeMatch<NounWord>(), ExamineItem));
+            _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("LOOK")), new WordTypeMatch<NounWord>(), ExamineItem));
 
             // Take
             _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("TAKE")), new WordTypeMatch<NounWord>(), TakeItem));
@@ -85,6 +89,7 @@ namespace TareEngine
             _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("LOOK")), new NullWorldMatch(), DescribeRoom));
             _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("INVENTORY")), new NullWorldMatch(), DescribeInventory));
             _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("DROP")), new WordTypeMatch<NounWord>(), DropItem));
+            _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("SCORE")), new NullWorldMatch(), ShowScore));
 
             // INVALID WORD <DirectionWord>
             _actions.Add(new MatchAction(new NullWorldMatch(), new WordTypeMatch<DirectionWord>(), list => ParserResult.Error));
@@ -151,6 +156,11 @@ namespace TareEngine
         internal ParserResult PatternMatch(Word word1, Word word2)
         {
             var action = _actions.FirstOrDefault(a => a.IsMatch(word1, word2));
+            if (action == null)
+            {
+                LastError = "What does that mean?";
+                return ParserResult.Error;
+            }
             return action.RunAction(this, word1, word2);
         }
 
@@ -172,6 +182,15 @@ namespace TareEngine
             }
             CurrentRoom = _rooms[direction.Slug];
             return ParserResult.ChangeRoom;
+        }
+
+        private ParserResult ShowScore(IEnumerable<Word> words)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Score:");
+            sb.AppendLine($"  Moves: {_flags.GetValue(GameFlags.PlayerMoveCount)}");
+            LastMessage = sb.ToString();
+            return ParserResult.ShowLastMessage;
         }
 
         private ParserResult DropItem(IEnumerable<Word> words)

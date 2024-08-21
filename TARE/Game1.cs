@@ -24,7 +24,6 @@ namespace TARE
         private Texture2D _graphic;
         private Engine _engine;
         private Terminal _term;
-        private Terminal _input;
         private KeyboardBuffer _keyboardBuffer;
         private Point _graphicPos;
 
@@ -48,7 +47,7 @@ namespace TARE
             _engine.Init();
 
             _state = TareGameState.DescribeRoom;
-            _term = new Terminal(_spriteBatch, _font, SCREEN_COLS, SCREEN_ROWS - 1, Point.Zero);
+            _term = new Terminal(_spriteBatch, _font, SCREEN_COLS, SCREEN_ROWS, Point.Zero);
             _term.Scrolled += (o, e) =>
             {
                 if (!_engine.CurrentRoom.HasGraphic || _graphic == null) return;
@@ -58,11 +57,13 @@ namespace TARE
                     ClearGraphic();
                 }
             };
-            _input = new Terminal(_spriteBatch, _font, 80, 1, new Point(0, 24 * _font.CellHeight));
+
             _keyboardBuffer = new KeyboardBuffer();
             _keyboardBuffer.TextEntered += (o, e) =>
             {
-                _term.WriteLine(_keyboardBuffer.Input);
+                if (string.IsNullOrEmpty(_keyboardBuffer.Input)) return;
+
+                _term.WriteLine("\n");
                 // PARSE INTO WORDS ....
                 var result = _engine.Parse(_keyboardBuffer.Input);
                 if (GraphicChanged())
@@ -90,18 +91,13 @@ namespace TARE
                         break;
                 }
 
-                _term.WriteLine("");
-                _term.WriteLine("What next?");
-
-                _input.Clear();
-                _keyboardBuffer.Clear();
-                _input.Write("> ");
+                WhatNext();
             };
             _keyboardBuffer.Backspace += (o, e) =>
             {
-                _input.Backspace();
+                _term.Backspace();
             };
-            _keyboardBuffer.CharacterEntered += (o, e) => _input.Write(e.ToString());
+            _keyboardBuffer.CharacterEntered += (o, e) => _term.Write(e.ToString());
 
             _graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             _graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
@@ -121,17 +117,26 @@ namespace TARE
                 Exit();
 
             _keyboardBuffer.Update(gameTime);
+            _term.Update(gameTime);
 
             if (_state == TareGameState.DescribeRoom)
             {
                 _term.Clear();
                 DescribeRoom();
-                _term.WriteLine("");
-                _term.WriteLine("What next?");
+                WhatNext();
                 _state = TareGameState.WaitForInput;
             }
 
             base.Update(gameTime);
+        }
+
+        private void WhatNext()
+        {
+            _term.WriteLine("What next?");
+            _term.WriteLine("");
+            _keyboardBuffer.Clear();
+            _term.GotoXY(0, SCREEN_ROWS - 1);
+            _term.Write("> ");
         }
 
         protected override void Draw(GameTime gameTime)
@@ -144,7 +149,7 @@ namespace TARE
                 var rect = new Rectangle(_graphicPos, new Point(SCREEN_WIDTH, 400));
                 _spriteBatch.Draw(_graphic, rect, Color.White);
             }
-            _input.Draw(gameTime);
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -186,6 +191,7 @@ namespace TARE
         {
             if (!isLook)
             {
+                _term.Clear();
                 bool bumpText = ShowGraphic();
                 if (bumpText)
                 {
@@ -197,9 +203,6 @@ namespace TARE
             DescribeItems();
             _term.WriteLine("");
             DescribeExits();
-
-            _input.Clear();
-            _input.Write("> ");
         }
 
         private void DescribeItems()

@@ -16,6 +16,9 @@ namespace TARE
         private bool _writeLine;
         private bool _scroll = true;
         private bool _acceptInput = false;
+        private float _cursorBlinkSpeed = 250;
+        private float _cursorCooldown = 0f;
+        private bool _cursorShow = false;
 
         public char CursorShape { get; set; } = '_';
 
@@ -37,10 +40,15 @@ namespace TARE
             _buffer = new char[columns * rows];
         }
 
+        public void GotoXY(int x, int y)
+        {
+            _cursor = new Point(x.Clamp(0, _columns - 1), y.Clamp(0, _rows-1)); 
+        }
+
         public void Clear()
         {
             _buffer = new char[_columns * _rows];
-            _cursor = new Point(0, 0);
+            GotoXY(0, 0);
         }
 
         public void Backspace()
@@ -125,6 +133,16 @@ namespace TARE
             Write(str);
         }
 
+        public void Update(GameTime gameTime)
+        {
+            _cursorCooldown += gameTime.ElapsedGameTime.Milliseconds;
+            if (_cursorCooldown >= _cursorBlinkSpeed)
+            {
+                _cursorCooldown -= _cursorBlinkSpeed;
+                _cursorShow = !_cursorShow;
+            }
+        }
+
         public void Draw(GameTime gameTime)
         {
             var pt = _point;
@@ -132,6 +150,12 @@ namespace TARE
             {
                 _spriteSheet.DrawString(_spriteBatch, pt, _buffer.SubArray(y * _columns, _columns).ToText());
                 pt += new Point(0, _spriteSheet.CellHeight);
+            }
+
+            if (_cursorShow)
+            {
+                var screenPoint = new Point(_cursor.X * _spriteSheet.CellWidth, _cursor.Y * _spriteSheet.CellHeight);
+                _spriteSheet.DrawString(_spriteBatch, screenPoint, "_");
             }
         }
 

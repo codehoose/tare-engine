@@ -6,10 +6,17 @@ namespace TareEngine.Flags
 {
     public class GameFlags
     {
+        public static readonly string PlayerMoveCount = "!moves";
+
         private readonly Dictionary<string, int> _flags = new();
         private readonly Engine _engine;
         private readonly List<IConditionAction> _preConditions = new();
         private readonly List<IConditionAction> _setConditions = new();
+
+        public void Increment(string flag)
+        {
+            if (_flags.ContainsKey(flag)) _flags[flag]++;
+        }
 
         public bool IsTruthy(string flagName)
         {
@@ -55,6 +62,9 @@ namespace TareEngine.Flags
 
         private void LoadFlags(SerializedFlag[] flags)
         {
+
+            _flags.Add(PlayerMoveCount, 0);
+
             foreach (var flag in flags)
             {
                 // Can be duplicates because the slug can appear for TAKE X and DROP X

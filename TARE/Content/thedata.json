@@ -4,15 +4,15 @@
     "rooms": [
       {
         "slug": "tardis",
-        "short": "TARE control room",
-        "description": "This is the TARE control room",
+        "short": "TARDIS control room",
+        "description": "This is the TARDIS control room",
         "exits": {
           "south": "outside-tardis"
         }
       },
       {
         "slug": "outside-tardis",
-        "short": "You are outside the TARE",
+        "short": "You are outside the TARDIS",
         "graphic": [ "backgrounds/tardis-field" ],
         "description": "You are in a wheat field. The large blue box that you arrived in is to the north. To the east is an open gate and a road.",
         "exits": {
@@ -85,11 +85,11 @@
     },
     {
       "slug": "tardis-key",
-      "name": "The TARE key",
-      "description": "The TARE key",
+      "name": "The TARDS key",
+      "description": "The TARDIS key",
       "examine": "The key looks like it would fit a standard Yale lock",
       "initial": "",
-      "words": [ "tardiskey" ]
+      "words": [ "tardis key" ]
     },
     {
       "slug": "shovel",
@@ -122,7 +122,7 @@
       "name": "The front door key",
       "description": "",
       "examine": "It's a key that opens the farm's front door and nothing else.",
-      "words": [ "key" ]
+      "words": [ "key", "door key", "front door key" ]
     },
     {
       "slug": "door",
@@ -141,7 +141,7 @@
       "set": {
         "location": "outside-tardis",
         "verb": "examine",
-        "text": "You will need to find the TARE key before you can enter.",
+        "text": "You will need to find the TARDIS key before you can enter.",
         "noun": "mat",
         "carry": "tardis-key",
         "type": "set"

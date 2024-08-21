@@ -30,6 +30,9 @@
             dictionary.Verbs.Add(new VerbWord("Inventory", "I"));
             dictionary.Verbs.Add(new VerbWord("Drop"));
 
+            // Score
+            dictionary.Verbs.Add(new VerbWord("Score"));
+
             // Fillers
             dictionary.Fillers.Add(new FillerWord("the"));
             dictionary.Fillers.Add(new FillerWord("a"));
