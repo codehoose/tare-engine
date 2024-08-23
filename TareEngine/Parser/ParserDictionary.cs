@@ -9,6 +9,14 @@
 
         public IEnumerable<Word> GetEnumerator() => Directions.Concat(Verbs).Concat(Nouns).Concat(Fillers);
 
+        public Type[] WordTypes = new Type[]
+        {
+            typeof(DirectionWord),
+            typeof(VerbWord),
+            typeof(NounWord),
+            typeof(FillerWord),
+        };
+
         public Word FindWord(string word)
         {
             var direction = Directions.Find(word);

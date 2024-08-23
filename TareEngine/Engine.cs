@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Reflection;
+using System.Text;
 using TareEngine.Flags;
 using TareEngine.Models;
 using TareEngine.Parser;
@@ -11,6 +13,7 @@ namespace TareEngine
     {
         private readonly TheParser _parser;
         private readonly Dictionary<string, Room> _rooms = new();
+        private readonly Dictionary<string, Func<IEnumerable<Word>, ParserResult>> _methods = new();
         private readonly List<Item> _items = new();
         private readonly List<IMatchAction> _actions = new();
         private readonly List<Item> _inventory = new();
@@ -34,7 +37,8 @@ namespace TareEngine
             LoadRooms(gameData.rooms);
             LoadItems(gameData.items);
             LoadFlags(gameData.flags);
-            MakeMatches();
+            LoadActions(gameData.actions);
+            //MakeMatches();
         }
 
         public ParserResult Parse(string input)
@@ -70,29 +74,9 @@ namespace TareEngine
             return result;
         }
 
-        private void MakeMatches()
+        private ParserResult ShowError(IEnumerable<Word> _)
         {
-            // GO <DirectionWord> 
-            _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("GO")), new WordTypeMatch<DirectionWord>(), ChangeRoom));
-
-            // <DirectionWord>
-            _actions.Add(new MatchAction(new WordTypeMatch<DirectionWord>(), new NullWorldMatch(), ChangeRoom));
-
-            // Examine
-            _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("EXAMINE")), new WordTypeMatch<NounWord>(), ExamineItem));
-            _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("LOOK")), new WordTypeMatch<NounWord>(), ExamineItem));
-
-            // Take
-            _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("TAKE")), new WordTypeMatch<NounWord>(), TakeItem));
-
-            // Look (redescribe current room)
-            _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("LOOK")), new NullWorldMatch(), DescribeRoom));
-            _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("INVENTORY")), new NullWorldMatch(), DescribeInventory));
-            _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("DROP")), new WordTypeMatch<NounWord>(), DropItem));
-            _actions.Add(new MatchAction(new SpecificWordMatch(_parser.FindWord("SCORE")), new NullWorldMatch(), ShowScore));
-
-            // INVALID WORD <DirectionWord>
-            _actions.Add(new MatchAction(new NullWorldMatch(), new WordTypeMatch<DirectionWord>(), list => ParserResult.Error));
+            return ParserResult.Error;
         }
 
         private void LoadRooms(SerializedRoomCollection rooms)
@@ -108,6 +92,52 @@ namespace TareEngine
         private void LoadFlags(SerializedFlag[] flags)
         {
             _flags = new GameFlags(this, flags);
+        }
+
+        private void LoadActions(SerializedAction[] actions)
+        {
+            _methods.Add(nameof(ChangeRoom), ChangeRoom);
+            _methods.Add(nameof(ExamineItem), ExamineItem);
+            _methods.Add(nameof(TakeItem), TakeItem);
+            _methods.Add(nameof(DescribeRoom), DescribeRoom);
+            _methods.Add(nameof(DescribeInventory), DescribeInventory);
+            _methods.Add(nameof(DropItem), DropItem);
+            _methods.Add(nameof(ShowScore), ShowScore);
+            _methods.Add(nameof(ShowError), ShowError);
+
+            foreach (var action in actions)
+            {
+                IMatch first = GetMatch(action.words[0]);
+                IMatch second = GetMatch(action.words[1]);
+                Func<IEnumerable<Word>, ParserResult> func = GetFunction(action.action);
+                _actions.Add(new MatchAction(first, second, func));
+            }
+        }
+
+        private IMatch GetMatch(string word)
+        {
+            if (word.StartsWith("!"))
+            {
+                return new SpecificWordMatch(_parser.FindWord(word.Substring(1)));
+            }else if (word == "-")
+            {
+                return new NullWorldMatch();
+            }
+            else
+            {
+                Type wordTypeMatch = typeof(WordTypeMatch<>);
+                Type genericArgument = _parser.Dictionary.WordTypes.FirstOrDefault(w => w.Name == word + "Word");
+                Type instantiableType = wordTypeMatch.MakeGenericType(new Type[] { genericArgument });
+                return (IMatch)Activator.CreateInstance(instantiableType);
+            }
+        }
+
+        private Func<IEnumerable<Word>, ParserResult> GetFunction(string word)
+        {
+            if (_methods.TryGetValue(word, out var func))
+                return func;
+
+            throw new ArgumentException($"Method '{word}' not found");
         }
 
         private void LoadItems(SerializedItem[] items)

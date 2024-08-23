@@ -203,5 +203,48 @@
         "type": "reset"
       }
     }
+  ],
+
+  "actions": [
+    {
+      "words": [ "!GO", "Direction" ],
+      "action": "ChangeRoom"
+    },
+    {
+      "words": [ "Direction", "-" ],
+      "action": "ChangeRoom"
+    },
+    {
+      "words": [ "!EXAMINE", "Noun" ],
+      "action": "ExamineItem"
+    },
+    {
+      "words": [ "!LOOK", "Noun" ],
+      "action": "ExamineItem"
+    },
+    {
+      "words": [ "!TAKE", "Noun" ],
+      "action": "TakeItem"
+    },
+    {
+      "words": [ "!LOOK", "-" ],
+      "action": "DescribeRoom"
+    },
+    {
+      "words": [ "!INVENTORY", "-" ],
+      "action": "DescribeInventory"
+    },
+    {
+      "words": [ "!DROP", "Noun" ],
+      "action": "DropItem"
+    },
+    {
+      "words": [ "!SCORE", "-" ],
+      "action": "ShowScore"
+    },
+    {
+      "words": [ "-", "Direction" ],
+      "action": "ShowError"
+    }
   ]
 }
