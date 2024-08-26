@@ -6,5 +6,6 @@
         None = 0,
         CannotCarry = 1,
         Hidden,
+        Openable,
     }
 }

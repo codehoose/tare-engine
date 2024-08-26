@@ -35,12 +35,20 @@ namespace TareEngine.Flags
             return _setConditions.FirstOrDefault(s => s.Slug == flagName)?.Text;
         }
 
-        public void Run(IEnumerable<Word> words)
+        public List<IConditionAction> Run(IEnumerable<Word> words)
         {
+            List<IConditionAction> actions = new List<IConditionAction>();
+
             foreach (var cond in _setConditions)
             {
-                if (cond.IsMatch(words)) cond.Action();
+                if (cond.IsMatch(words))
+                {
+                    cond.Action();
+                    actions.Add(cond);
+                }
             }
+
+            return actions;
         }
 
         public bool TryGetPreCondition(IEnumerable<Word> words, out IConditionAction condition)

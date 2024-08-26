@@ -67,7 +67,17 @@ namespace TareEngine
             }
             else if (result != ParserResult.Error)
             {
-                Flags.Run(tokens);
+                var actions = Flags.Run(tokens);
+                var withText = actions.Where(a => !string.IsNullOrEmpty(a.Text)).Select(a => a.Text);
+                if (withText.Any())
+                {
+                    var sb = new StringBuilder();
+                    foreach (var a in withText)
+                    {
+                        sb.AppendLine(a);
+                    }
+                    LastMessage = sb.ToString().Trim();
+                }
             }
 
             _flags.Increment(GameFlags.PlayerMoveCount);
@@ -104,6 +114,7 @@ namespace TareEngine
             _methods.Add(nameof(DropItem), DropItem);
             _methods.Add(nameof(ShowScore), ShowScore);
             _methods.Add(nameof(ShowError), ShowError);
+            _methods.Add(nameof(OpenItem), OpenItem);
 
             foreach (var action in actions)
             {
@@ -192,6 +203,32 @@ namespace TareEngine
                 return ParserResult.Error;
             }
             return action.RunAction(this, word1, word2);
+        }
+
+        private ParserResult OpenItem(IEnumerable<Word> words)
+        {
+            var noun = words.FirstOrDefault(w => w is NounWord);
+            if (noun == null)
+            {
+                LastError = $"I don't know how to open {noun.Primary}!";
+                return ParserResult.Error;
+            }
+
+            var item = _items.FirstOrDefault(i => i.Word == noun);
+            if (item == null)
+            {
+                LastError = $"Can you see {noun.Primary} here?";
+                return ParserResult.Error;
+            }
+
+            if ((item.Flags & ObjectFlags.Openable) != ObjectFlags.Openable)
+            {
+                LastError = $"You cannot open {noun.Primary}.";
+                return ParserResult.Error;
+            }
+
+            LastMessage = $"The {noun.Primary} is open.";
+            return ParserResult.ShowLastMessage;
         }
 
         private ParserResult ChangeRoom(IEnumerable<Word> words)
