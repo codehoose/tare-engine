@@ -5,6 +5,7 @@
       {
         "slug": "tardis",
         "short": "TARDIS control room",
+        "graphic": [ "backgrounds/tardis-control-room" ],
         "description": "This is the TARDIS control room",
         "exits": {
           "south": "outside-tardis"
@@ -24,6 +25,7 @@
       {
         "slug": "gate-in-wall",
         "short": "Gate in a wall",
+        "graphic": [ "backgrounds/gate-in-wall" ],
         "description": "The wooden gate is crumbling and a couple of the horizontal bars are ready to snap. To the west is the TARDIS, to the south is more road.",
         "exits": {
           "west": "outside-tardis",
@@ -71,6 +73,45 @@
           "west": "path-to-farm-2"
         },
         "blockers": { "east": "front-door-opened" }
+      },
+      {
+        "slug": "hall-way",
+        "short": "Hallway",
+        "graphic": [ "backgrounds/hallway" ],
+        "description": "You are in a dusty hallway. Light streams in from the open door to the West and to the North is a dimly lit sitting room. To the East is the kichen.",
+        "exits": {
+          "east": "kitchen",
+          "west": "court-yard",
+          "north": "sitting-room"
+        }
+      },
+      {
+        "slug": "sitting-room",
+        "short": "The Sitting Room",
+        "graphic": [ "backgrounds/sitting-room" ],
+        "description": "The sitting room is empty! The floorboards have marks on them that indicate a long gone rug was in the middle of the room. Given the size, they might have been better off buying a carpet. The hallway is to the South.",
+        "exits": {
+          "south": "hall-way"
+        }
+      },
+      {
+        "slug": "kitchen",
+        "short": "The Kitchen",
+        "graphic": [ "backgrounds/kitchen" ],
+        "description": "A delightful farmhouse kitchen! There is a stove on the North wall and a table with four chairs in the middle. The room is surrounded by cupboards. The wash basin is directly under the South window and you can hear birds chirping through the glass. On the east wall is a pantry that you could easily walk in.",
+        "exits": {
+          "west": "hall-way",
+          "east": "pantry"
+        }
+      },
+      {
+        "slug": "pantry",
+        "short": "The Pantry",
+        "graphic": [ "backgrounds/pantry" ],
+        "description": "The walk in pantry is dark and smells musty. At some point there must have been tins of this and that on the shelves. But it's mostly dust and cobwebs. The floor feels strange too, not quite solid, not quite not solid.'",
+        "exits": {
+          "west": "kitchen"
+        }
       }
     ]
   },
