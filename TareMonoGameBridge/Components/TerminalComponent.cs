@@ -1,13 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using TareMonoGameBridge.Extensions;
+using TareMonoGameBridge.Graphics;
 
-namespace TARE
+namespace TareMonoGameBridge.Components
 {
-    internal class Terminal
+    public class TerminalComponent : TareDrawableGameComponent
     {
         private readonly SpriteBatch _spriteBatch;
-        private readonly SpriteSheet _spriteSheet;
+        private SpriteSheet _spriteSheet;
         private readonly int _columns;
         private readonly int _rows;
         private readonly Point _point;
@@ -22,6 +24,8 @@ namespace TARE
 
         public char CursorShape { get; set; } = '_';
 
+        public SpriteSheet Font { get { return _spriteSheet; } set { _spriteSheet = value; } }
+
         public event EventHandler Scrolled;
 
         public bool Scroll
@@ -30,19 +34,19 @@ namespace TARE
             set => _scroll = value;
         }
 
-        public Terminal(SpriteBatch spriteBatch, SpriteSheet spriteSheet, int columns, int rows, Point point)
+        public TerminalComponent(AdventureGame game, int columns, int rows, Point point) : base(game)
         {
-            _spriteBatch = spriteBatch;
-            _spriteSheet = spriteSheet;
             _columns = columns;
             _rows = rows;
             _point = point;
             _buffer = new char[columns * rows];
+            _spriteBatch = game.SpriteBatch;
         }
+
 
         public void GotoXY(int x, int y)
         {
-            _cursor = new Point(x.Clamp(0, _columns - 1), y.Clamp(0, _rows-1)); 
+            _cursor = new Point(x.Clamp(0, _columns - 1), y.Clamp(0, _rows - 1));
         }
 
         public void Clear()
@@ -133,17 +137,7 @@ namespace TARE
             Write(str);
         }
 
-        public void Update(GameTime gameTime)
-        {
-            _cursorCooldown += gameTime.ElapsedGameTime.Milliseconds;
-            if (_cursorCooldown >= _cursorBlinkSpeed)
-            {
-                _cursorCooldown -= _cursorBlinkSpeed;
-                _cursorShow = !_cursorShow;
-            }
-        }
-
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             var pt = _point;
             for (int y = 0; y < _rows; y++)
@@ -157,6 +151,21 @@ namespace TARE
                 var screenPoint = new Point(_cursor.X * _spriteSheet.CellWidth, _cursor.Y * _spriteSheet.CellHeight);
                 _spriteSheet.DrawString(_spriteBatch, screenPoint, "_");
             }
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            _cursorCooldown += gameTime.ElapsedGameTime.Milliseconds;
+            if (_cursorCooldown >= _cursorBlinkSpeed)
+            {
+                _cursorCooldown -= _cursorBlinkSpeed;
+                _cursorShow = !_cursorShow;
+            }
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
         }
 
         private void ShiftUp()

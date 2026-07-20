@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TARE
+namespace TareMonoGameBridge.Extensions
 {
     public static class IntegerExtensions
     {

@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 using System;
 
-namespace TARE
+namespace TareMonoGameBridge.Input
 {
-    internal class KeyboardBuffer
+    public class KeyboardBuffer
     {
         const float CooldownMS = 50;
 
@@ -51,7 +51,7 @@ namespace TARE
 
                 cooldown = CooldownMS;
             }
-            
+
             _previous = state;
         }
     }

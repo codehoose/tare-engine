@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Text;
+﻿using System.Text;
 using TareEngine.Flags;
 using TareEngine.Models;
 using TareEngine.Parser;
@@ -38,7 +36,6 @@ namespace TareEngine
             LoadItems(gameData.items);
             LoadFlags(gameData.flags);
             LoadActions(gameData.actions);
-            //MakeMatches();
         }
 
         public ParserResult Parse(string input)

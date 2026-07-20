@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace TARE
+namespace TareMonoGameBridge.Extensions
 {
     internal static class ArrayExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
-namespace TARE
+namespace TareMonoGameBridge.Input
 {
     internal static class KeyboardStateExtensions
     {
@@ -98,5 +98,4 @@ namespace TARE
         }
 
     }
-
 }
