@@ -9,6 +9,7 @@ namespace TARE.States
     {
         private readonly IState<AdventureGame> _nextState;
         private TerminalComponent _term;
+        private RoomDescriptionComponent _roomGraphic;
         private IStateMachine<AdventureGame> _stateMachine;
 
         public static InitState Instance = new InitState();
@@ -26,6 +27,8 @@ namespace TARE.States
 
             _term = fsm.Game.AddComponent<TerminalComponent>(cols, rows, Point.Zero);
             _term.Font = fsm.Game.LoadSpriteSheet("font/ibm-font-large", fontWidth, fontHeight);
+            _roomGraphic = fsm.Game.AddComponent<RoomDescriptionComponent>();
+
             fsm.Game.Terminal = _term;
             fsm.EnterState(DescribeRoomState.Instance);
         }

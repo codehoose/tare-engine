@@ -27,6 +27,9 @@ namespace TareMonoGameBridge
 
         public GraphicsDeviceManager Graphics => _graphics;
 
+        public Texture2D RoomGraphic => _graphic;
+        public Point RoomGraphicPosition => _graphicPos;
+
         public Engine Engine => _engine;
 
         public AdventureGameConfig Config => _config;
@@ -97,7 +100,7 @@ namespace TareMonoGameBridge
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             base.Draw(gameTime);
             _spriteBatch.End();
