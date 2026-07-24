@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using TareMonoGameBridge.Extensions;
-using TareMonoGameBridge.Graphics;
-
-namespace TareMonoGameBridge.Components
+﻿namespace TareMonoGameBridge.Components
 {
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using System;
+    using TareMonoGameBridge.Extensions;
+    using TareMonoGameBridge.Graphics;
+
     public class TerminalComponent : TareDrawableGameComponent
     {
         private readonly SpriteBatch _spriteBatch;

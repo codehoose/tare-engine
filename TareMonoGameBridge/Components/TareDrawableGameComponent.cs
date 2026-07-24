@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-
-namespace TareMonoGameBridge.Components
+﻿namespace TareMonoGameBridge.Components
 {
+    using Microsoft.Xna.Framework;
+    using System;
+
     public class TareDrawableGameComponent : TareGameComponent, IDrawable
     {
         private int _drawOrder;

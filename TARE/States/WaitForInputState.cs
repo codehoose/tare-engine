@@ -2,13 +2,11 @@
 using TareMonoGameBridge;
 using TareMonoGameBridge.Components;
 using TareMonoGameBridge.FSM;
-using TareMonoGameBridge.Input;
 
 namespace TARE.States
 {
     internal class WaitForInputState : IState<AdventureGame>
     {
-        private KeyboardBuffer _keyboardBuffer;
         private TerminalComponent _term;
         private Engine _engine;
         private AdventureGame _game;
@@ -23,26 +21,15 @@ namespace TARE.States
             _engine = fsm.Game.Engine;
             _game = fsm.Game;
 
-            if (_keyboardBuffer == null)
-            {
-                _keyboardBuffer = new KeyboardBuffer();
-                _keyboardBuffer.TextEntered += (o, e) =>
-                {
-                    fsm.Game.HandleInput(_keyboardBuffer.Input);
-
-                    fsm.Game.WhatNext();
-                };
-                _keyboardBuffer.Backspace += (o, e) =>
-                {
-                    _term.Backspace();
-                };
-                _keyboardBuffer.CharacterEntered += (o, e) => _term.Write(e.ToString());
-            }
+            var keyboard = _game.GetComponent<KeyboardBufferComponent>();
+            keyboard.Enabled = true;
+            keyboard.ClearBuffer();
         }
 
         public void Exit(IStateMachine<AdventureGame> fsm)
         {
-
+            var keyboard = _game.GetComponent<KeyboardBufferComponent>();
+            keyboard.Enabled = false;
         }
 
         public void Update(float deltaTime)

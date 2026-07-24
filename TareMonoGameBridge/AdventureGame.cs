@@ -1,19 +1,15 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Linq;
-using System.Xml.Linq;
-using TareEngine;
-using TareEngine.Models;
-using TareEngine.Parser;
-using TareMonoGameBridge.Components;
-using TareMonoGameBridge.FSM;
-using TareMonoGameBridge.Graphics;
-using TareMonoGameBridge.Input;
-
-namespace TareMonoGameBridge
+﻿namespace TareMonoGameBridge
 {
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using Microsoft.Xna.Framework.Input;
+    using System;
+    using System.Linq;
+    using TareEngine;
+    using TareMonoGameBridge.Components;
+    using TareMonoGameBridge.FSM;
+    using TareMonoGameBridge.Graphics;
+
     public class AdventureGame : Game
     {
         private Texture2D _graphic;
@@ -21,12 +17,13 @@ namespace TareMonoGameBridge
         private GraphicsDeviceManager _graphics;
         private Engine _engine;
         private SpriteBatch _spriteBatch;
-        protected IStateMachine<AdventureGame> StateMachine { get; }
+        
         protected AdventureGameConfig _config;
         public SpriteBatch SpriteBatch => _spriteBatch;
 
         public GraphicsDeviceManager Graphics => _graphics;
 
+        public IStateMachine<AdventureGame> StateMachine { get; }
         public Texture2D RoomGraphic => _graphic;
         public Point RoomGraphicPosition => _graphicPos;
 
@@ -44,10 +41,16 @@ namespace TareMonoGameBridge
             IsMouseVisible = true;
         }
 
+        public T GetComponent<T>() where T: TareGameComponent
+        {
+            return (T)Components.FirstOrDefault(c => c is T);
+        }
+
         public T AddComponent<T>() where T : TareGameComponent
         {
             var component = (T)Activator.CreateInstance(typeof(T), this);
             Components.Add(component);
+            component.Initialize();
             return component;
         }
 
@@ -64,6 +67,7 @@ namespace TareMonoGameBridge
 
             var component = (T)Activator.CreateInstance(typeof(T), array);
             Components.Add(component);
+            component.Initialize();
             return component;
         }
 
@@ -72,6 +76,8 @@ namespace TareMonoGameBridge
 
         public SpriteSheet LoadSpriteSheet(string spriteSheet, int cellWidth, int cellHeight)
             => new SpriteSheet(Content.Load<Texture2D>(spriteSheet), cellWidth, cellHeight);
+
+        public virtual void EnterDescribeRoomState() { }
 
         protected override void Initialize()
         {
@@ -83,8 +89,22 @@ namespace TareMonoGameBridge
         {
             base.LoadContent();
 
+            SetupTerminal();
+
             _engine = new Engine();
             _engine.Init();
+        }
+
+        private void SetupTerminal()
+        {
+            var cols = Config.ScreenCols;
+            var rows = Config.ScreenRows;
+            var fontWidth = Config.FontWidth;
+            var fontHeight = Config.FontHeight;
+
+            Terminal = AddComponent<TerminalComponent>(cols, rows, Point.Zero);
+            Terminal.Font = LoadSpriteSheet("font/ibm-font-large", fontWidth, fontHeight);
+            Terminal.Scrolled += (o, e) => TerminalScrolled();
         }
 
         protected override void Update(GameTime gameTime)
@@ -106,7 +126,7 @@ namespace TareMonoGameBridge
             _spriteBatch.End();
         }
 
-        private bool GraphicChanged()
+        public bool HasGraphicChanged()
         {
             string graphicName = Engine.CurrentRoom.Graphic;
             if (!string.IsNullOrEmpty(Engine.CurrentRoom.GraphicFlag))
@@ -158,52 +178,19 @@ namespace TareMonoGameBridge
         {
             Terminal.WriteLine("What next?");
             Terminal.WriteLine("");
-            //_keyboardBuffer.Clear();
             Terminal.GotoXY(0, Config.ScreenRows - 1);
             Terminal.Write("> ");
         }
 
         protected virtual void ChangeRoom() { }
 
-        protected virtual void DescribeRoom(bool isLook = false) { }
+        public virtual void DescribeRoom(bool isLook = false) { }
 
-        private string GetLastError()
+        public string GetLastError()
         {
-            string lastError = Engine.LastError;
+            var lastError = Engine.LastError;
             if (string.IsNullOrEmpty(lastError)) return "I didn't understand that";
             return lastError;
-        }
-
-        public void HandleInput(string input)
-        {
-            if (string.IsNullOrEmpty(input)) return;
-
-            Terminal.WriteLine("\n");
-            // PARSE INTO WORDS ....
-            var result = _engine.Parse(input);
-            if (GraphicChanged())
-            {
-                ShowGraphic(false);
-            }
-            switch (result)
-            {
-                case ParserResult.ChangeRoom:
-                    ChangeRoom();
-                    break;
-                case ParserResult.Error:
-                    string error = GetLastError();
-                    Terminal.WriteLine(error);
-                    break;
-                case ParserResult.CannotSeeItem:
-                    Terminal.WriteLine(Engine.LastError);
-                    break;
-                case ParserResult.ShowLastMessage:
-                    Terminal.WriteLine(Engine.LastMessage);
-                    break;
-                case ParserResult.DescribeRoom:
-                    DescribeRoom(true);
-                    break;
-            }
         }
     }
 }
