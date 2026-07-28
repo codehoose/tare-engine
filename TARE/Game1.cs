@@ -33,7 +33,7 @@ namespace TARE
         {
             base.LoadContent();
 
-            StateMachine.EnterState(InitState.Instance);
+            StateMachine.EnterState(InitGameState.Instance);
             Graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             Graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
             Graphics.ApplyChanges();

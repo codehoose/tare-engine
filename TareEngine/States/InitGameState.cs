@@ -1,14 +1,15 @@
 ﻿namespace TareEngine.States
 {
-    public class InitState : IState<IAdventureGame>
+    public class InitGameState : IState<IAdventureGame>
     {
-        public static InitState Instance = new InitState();
+        public static InitGameState Instance = new InitGameState();
 
-        private InitState() { }
+        private InitGameState() { }
 
         public void Enter(IStateMachine<IAdventureGame> fsm)
         {
             fsm.Game.Init();
+            fsm.EnterState(DescribeRoomState.Instance);
         }
 
         public void Exit(IStateMachine<IAdventureGame> fsm)

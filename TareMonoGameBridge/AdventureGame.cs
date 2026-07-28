@@ -49,8 +49,6 @@
         {
             AddComponent<RoomDescriptionGraphicComponent>();
             _keyboard = AddComponent<KeyboardBufferComponent>();
-
-            StateMachine.EnterState(DescribeRoomState.Instance);
         }
 
         public AdventureGame()
