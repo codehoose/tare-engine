@@ -1,6 +1,6 @@
-﻿namespace TARE.States
+﻿namespace TareEngine.States
 {
-    internal class DescribeWithLookRoomState : BaseDescribeRoomState
+    internal class DescribeWithLookRoomState : DescribeRoomBaseState
     {
         public static DescribeWithLookRoomState Instance = new DescribeWithLookRoomState();
 

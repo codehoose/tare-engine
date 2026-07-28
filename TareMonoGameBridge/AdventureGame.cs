@@ -6,24 +6,26 @@
     using System;
     using System.Linq;
     using TareEngine;
+    using TareEngine.Models;
+    using TareEngine.States;
     using TareMonoGameBridge.Components;
-    using TareMonoGameBridge.FSM;
     using TareMonoGameBridge.Graphics;
 
-    public class AdventureGame : Game
+    public class AdventureGame : Game, IAdventureGame
     {
         private Texture2D _graphic;
         private Point _graphicPos;
         private GraphicsDeviceManager _graphics;
         private Engine _engine;
         private SpriteBatch _spriteBatch;
-        
+        private KeyboardBufferComponent _keyboard;
+
         protected AdventureGameConfig _config;
         public SpriteBatch SpriteBatch => _spriteBatch;
 
         public GraphicsDeviceManager Graphics => _graphics;
 
-        public IStateMachine<AdventureGame> StateMachine { get; }
+        public IStateMachine<IAdventureGame> StateMachine { get; }
         public Texture2D RoomGraphic => _graphic;
         public Point RoomGraphicPosition => _graphicPos;
 
@@ -32,6 +34,24 @@
         public AdventureGameConfig Config => _config;
 
         public TerminalComponent Terminal { get; set; }
+
+        public void ClearTerminal() => Terminal?.Clear();
+
+        public void ClearKeyboard() => _keyboard?.ClearBuffer();
+
+        public void ToggleKeyboard(bool enableKeyboard)
+        {
+            if (_keyboard == null) return;
+            _keyboard.Enabled = enableKeyboard;
+        }
+
+        public virtual void Init()
+        {
+            AddComponent<RoomDescriptionGraphicComponent>();
+            _keyboard = AddComponent<KeyboardBufferComponent>();
+
+            StateMachine.EnterState(DescribeRoomState.Instance);
+        }
 
         public AdventureGame()
         {
@@ -77,7 +97,7 @@
         public SpriteSheet LoadSpriteSheet(string spriteSheet, int cellWidth, int cellHeight)
             => new SpriteSheet(Content.Load<Texture2D>(spriteSheet), cellWidth, cellHeight);
 
-        public virtual void EnterDescribeRoomState() { }
+        public virtual void EnterDescribeRoomState() => DescribeRoom();
 
         protected override void Initialize()
         {
@@ -182,9 +202,48 @@
             Terminal.Write("> ");
         }
 
-        protected virtual void ChangeRoom() { }
+        protected virtual void ChangeRoom()
+        {
+            StateMachine.EnterState(ChangeRoomState.Instance);
+        }
 
-        public virtual void DescribeRoom(bool isLook = false) { }
+        public void DescribeRoom(bool isLook = false)
+        {
+            if (!isLook)
+            {
+                Terminal.Clear();
+                bool bumpText = ShowGraphic();
+                if (bumpText)
+                {
+                    // That's 13 rows
+                    Terminal.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                }
+            }
+            Terminal.WriteLine(_engine.CurrentRoom.Description);
+            DescribeItems();
+            Terminal.WriteLine("");
+            DescribeExits();
+        }
+
+        private void DescribeItems()
+        {
+            if (_engine.CurrentRoom.Items.Count == 0) return;
+            Terminal.Write("You can see: ");
+            var items = _engine.CurrentRoom.Items.Where(i => (i.Flags & ObjectFlags.Hidden) != ObjectFlags.Hidden).Select(i => i.Name).ToArray();
+            Terminal.WriteLine(GetJoined(items));
+        }
+
+        private void DescribeExits()
+        {
+            Terminal.Write("Exits: ");
+            var exits = _engine.GetExits();
+            Terminal.WriteLine(GetJoined(exits));
+        }
+        private string GetJoined(string[] items, string multiple = ", ", string twoItems = " and ")
+        {
+            var joiner = items.Length > 2 ? ", " : " and ";
+            return string.Join(joiner, items);
+        }
 
         public string GetLastError()
         {

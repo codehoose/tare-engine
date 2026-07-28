@@ -1,11 +1,11 @@
-﻿namespace TARE.States
+﻿namespace TareEngine.States
 {
-    internal class DescribeRoomState : BaseDescribeRoomState
+    public class DescribeRoomState : DescribeRoomBaseState
     {
         public static DescribeRoomState Instance = new DescribeRoomState();
 
         private DescribeRoomState() : base(false)
-        { 
+        {
         }
     }
 }

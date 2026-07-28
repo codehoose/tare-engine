@@ -1,8 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace TareMonoGameBridge.FSM
+﻿namespace TareEngine.States
 {
-    public interface IStateMachine<T> where T: Game
+    public interface IStateMachine<T> where T : IAdventureGame
     {
         public T Game { get; }
         void EnterState(IState<T> state);

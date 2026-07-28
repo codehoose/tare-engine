@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using TARE.States;
+using TareEngine.States;
 using TareMonoGameBridge;
-
 
 namespace TARE
 {
@@ -38,18 +37,6 @@ namespace TARE
             Graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             Graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
             Graphics.ApplyChanges();
-        }
-
-        protected override void ChangeRoom()
-        {
-            StateMachine.EnterState(ChangeRoomState.Instance);
-        }
-
-        public override void EnterDescribeRoomState() => DescribeRoom();
-
-        public override void DescribeRoom(bool isLook = false)
-        {
-            StateMachine.EnterState(isLook ? DescribeWithLookRoomState.Instance : DescribeRoomState.Instance);
         }
 
         protected override void Update(GameTime gameTime)

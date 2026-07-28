@@ -1,18 +1,18 @@
-﻿namespace TareMonoGameBridge.FSM
+﻿namespace TareEngine.States
 {
-    public class StateMachine : IStateMachine<AdventureGame>
+    public class StateMachine : IStateMachine<IAdventureGame>
     {
-        private IState<AdventureGame>? _currentState;
-        private readonly AdventureGame _game;
+        private IState<IAdventureGame>? _currentState;
+        private readonly IAdventureGame _game;
 
-        public AdventureGame Game => _game;
+        public IAdventureGame Game => _game;
 
-        public StateMachine(AdventureGame game)
+        public StateMachine(IAdventureGame game)
         {
             _game = game;
         }
 
-        public void EnterState(IState<AdventureGame> state)
+        public void EnterState(IState<IAdventureGame> state)
         {
             if (_currentState != null) _currentState.Exit(this);
             _currentState = state;

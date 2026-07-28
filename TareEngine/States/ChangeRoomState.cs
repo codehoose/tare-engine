@@ -1,27 +1,24 @@
-﻿using TareMonoGameBridge;
-using TareMonoGameBridge.FSM;
-
-namespace TARE.States
+﻿namespace TareEngine.States
 {
-    internal class ChangeRoomState : IState<AdventureGame>
+    public class ChangeRoomState : IState<IAdventureGame>
     {
         public static ChangeRoomState Instance = new ChangeRoomState();
         private ChangeRoomState() { }
 
-        public void Enter(IStateMachine<AdventureGame> fsm)
+        public void Enter(IStateMachine<IAdventureGame> fsm)
         {
             fsm.Game.ClearGraphic();
             fsm.EnterState(DescribeRoomState.Instance);
         }
 
-        public void Exit(IStateMachine<AdventureGame> fsm)
+        public void Exit(IStateMachine<IAdventureGame> fsm)
         {
-            
+
         }
 
         public void Update(float deltaTime)
         {
-            
+
         }
     }
 }
