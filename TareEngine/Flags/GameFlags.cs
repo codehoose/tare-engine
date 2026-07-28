@@ -35,6 +35,10 @@ namespace TareEngine.Flags
             return _setConditions.FirstOrDefault(s => s.Slug == flagName)?.Text;
         }
 
+        public string GetBlockedText(string flagName) =>
+             _setConditions.FirstOrDefault(s => s.Slug == flagName)?.BlockedText;
+        
+
         public List<IConditionAction> Run(IEnumerable<Word> words)
         {
             List<IConditionAction> actions = new List<IConditionAction>();

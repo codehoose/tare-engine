@@ -236,7 +236,7 @@ namespace TareEngine
             {
                 if (direction != null)
                 {
-                    LastError = _flags.GetText(direction.Blocked) ?? "You can't go that way!";
+                    LastError = _flags.GetBlockedText(direction.Blocked) ?? "You can't go that way!";
                 }
                 else
                 {

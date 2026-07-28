@@ -224,7 +224,7 @@
         "location": "court-yard",
         "verb": "open",
         "flag": "!front-door-opened",
-        "text": "The key slides into the lock and on turning it, the door swings open with a loud squeeeeek!",
+        "text": "KEY 2 The key slides into the lock and on turning it, the door swings open with a loud squeeeeek!",
         "noun": "door",
         "carry": "key",
         "type": "set"
