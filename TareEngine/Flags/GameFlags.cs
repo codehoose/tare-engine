@@ -81,54 +81,60 @@ namespace TareEngine.Flags
             {
                 // Can be duplicates because the slug can appear for TAKE X and DROP X
                 _flags.TryAdd(flag.slug, 0);
-                AddConditions(flag.slug, flag.set);
+                AddConditions(flag.slug, flag.cond);
             }
         }
 
-        private void AddConditions(string slug, SerializedFlagSet set)
+        private void AddConditions(string slug, SerializedFlagSet[] conds)
         {
             Action tasks = null;
-            if (set.tasks != null && set.tasks.Length > 0)
+
+            foreach (var set in conds)
             {
-                foreach (var t in set.tasks)
+                if (set.tasks != null && set.tasks.Length > 0)
                 {
-                    switch (t.type)
+                    foreach (var t in set.tasks)
                     {
-                        case "drop": tasks += new DropItemTask(_engine, t.argument).Do;
-                            break;
+                        switch (t.type)
+                        {
+                            case "drop":
+                                tasks += new DropItemTask(_engine, t.argument).Do;
+                                break;
+                        }
                     }
                 }
-            }
 
-            Action action = null;
-            var type = string.IsNullOrEmpty(set.type) ? "set" : set.type;
-            switch(set.type)
-            {
-                case "set":
-                    action = () => _flags[slug] = 1;
-                    break;
-                case "reset":
-                    action = () => _flags[slug] = 0;
-                    break;
-            }
 
-            if (tasks != null) action += tasks;
+                Action action = null;
+                var type = string.IsNullOrEmpty(set.type) ? "set" : set.type;
+                switch (set.type)
+                {
+                    case "set":
+                        action = () => _flags[slug] = 1;
+                        break;
+                    case "reset":
+                        action = () => _flags[slug] = 0;
+                        break;
+                }
 
-            List<IFlagCondition> conditions = new List<IFlagCondition>();
-            if (!string.IsNullOrEmpty(set.location)) conditions.Add(new LocationCondition(set.location, _engine));
-            if (!string.IsNullOrEmpty(set.verb)) conditions.Add(new WordMatchCondition(_engine.Parser.Dictionary.FindWord(set.verb)));
-            if (!string.IsNullOrEmpty(set.noun)) conditions.Add(new WordMatchCondition(_engine.Parser.Dictionary.FindWord(set.noun)));
-            if (!string.IsNullOrEmpty(set.carry)) conditions.Add(new CarryCondition(set.carry, _engine));
-            if (!string.IsNullOrEmpty(set.flag)) AddFlagCondition(conditions, set.flag);
+                if (tasks != null) action += tasks;
 
-            var cond = new ConditionAction(slug, set.text, set.blockedText, conditions, action);
-            if (set.when == "pre")
-            {
-                _preConditions.Add(cond);
-            }
-            else
-            {
-                _setConditions.Add(cond);
+                List<IFlagCondition> conditions = new List<IFlagCondition>();
+                if (!string.IsNullOrEmpty(set.location)) conditions.Add(new LocationCondition(set.location, _engine));
+                if (!string.IsNullOrEmpty(set.verb)) conditions.Add(new WordMatchCondition(_engine.Parser.Dictionary.FindWord(set.verb)));
+                if (!string.IsNullOrEmpty(set.noun)) conditions.Add(new WordMatchCondition(_engine.Parser.Dictionary.FindWord(set.noun)));
+                if (!string.IsNullOrEmpty(set.carry)) conditions.Add(new CarryCondition(set.carry, _engine));
+                if (!string.IsNullOrEmpty(set.flag)) AddFlagCondition(conditions, set.flag);
+
+                var cond = new ConditionAction(slug, set.text, set.blockedText, conditions, action);
+                if (set.when == "pre")
+                {
+                    _preConditions.Add(cond);
+                }
+                else
+                {
+                    _setConditions.Add(cond);
+                }
             }
         }
 

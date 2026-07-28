@@ -4,6 +4,6 @@
     public class SerializedFlag
     {
         public string slug;
-        public SerializedFlagSet set;
+        public SerializedFlagSet[] cond; // conditions
     }
 }
