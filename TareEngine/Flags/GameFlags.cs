@@ -30,13 +30,13 @@ namespace TareEngine.Flags
             return value;
         }
 
-        public string GetText(string flagName)
+        public string? GetText(string flagName)
         {
             return _setConditions.FirstOrDefault(s => s.Slug == flagName)?.Text;
         }
 
-        public string GetBlockedText(string flagName) =>
-             _setConditions.FirstOrDefault(s => s.Slug == flagName)?.BlockedText;
+        public IEnumerable<IConditionAction> GetConditions(string flagName) =>
+             _setConditions.Where(s => s.Slug == flagName);
         
 
         public List<IConditionAction> Run(IEnumerable<Word> words)
@@ -121,7 +121,7 @@ namespace TareEngine.Flags
             if (!string.IsNullOrEmpty(set.carry)) conditions.Add(new CarryCondition(set.carry, _engine));
             if (!string.IsNullOrEmpty(set.flag)) AddFlagCondition(conditions, set.flag);
 
-            var cond = new ConditionAction(slug, set.text, conditions, action);
+            var cond = new ConditionAction(slug, set.text, set.blockedText, conditions, action);
             if (set.when == "pre")
             {
                 _preConditions.Add(cond);

@@ -10,7 +10,7 @@ namespace TareEngine.Flags
 
         public bool IsMatch(IEnumerable<Word> input)
         {
-            return input.Contains(_word);
+            return input.Any(w => w.Primary.Equals(_word.Primary));
         }
     }
 }

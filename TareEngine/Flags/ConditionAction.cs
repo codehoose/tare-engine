@@ -13,10 +13,11 @@ namespace TareEngine.Flags
 
         public string Slug { get; }
 
-        public ConditionAction(string slug, string text, IEnumerable<IFlagCondition> conditions, Action action)
+        public ConditionAction(string slug, string text, string blockedText, IEnumerable<IFlagCondition> conditions, Action action)
         {
             Slug = slug; 
             Text = text;
+            BlockedText = blockedText;
             _conditions = conditions;
             Action = action;
         }

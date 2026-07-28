@@ -15,7 +15,7 @@ namespace TareEngine.Flags
 
         public bool IsMatch(IEnumerable<Word> input)
         {
-            return _engine.Inventory.Count(i => i.Slug == _item) >= 0;
+            return _engine.Inventory.Count(i => i.Slug == _item) > 0;
         }
     }
 }

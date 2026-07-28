@@ -210,10 +210,33 @@
       "slug": "front-door-opened",
       "set": {
         "location": "court-yard",
+        "verb": "east",
+        "flag": "!front-door-opened",
+        "blockedText": "The door is locked!",
+        "noun": "-",
+        "carry": "door-key",
+        "type": "set"
+      }
+    },
+    {
+      "slug": "front-door-opened",
+      "set": {
+        "location": "court-yard",
+        "verb": "east",
+        "flag": "!front-door-opened",
+        "blockedText": "The door is locked! It looks like you need a key, which you don't have. There must be a key around here somewhere!'",
+        "noun": "-",
+        "type": "set"
+      }
+    },
+    {
+      "slug": "front-door-opened",
+      "set": {
+        "location": "court-yard",
         "verb": "use",
         "noun": "key",
         "flag": "!front-door-opened",
-        "carry": "key",
+        "carry": "door-key",
         "text": "The key slides into the lock and on turning it, the door swings open with a loud squeeeeek!",
         "type": "set"
       }
@@ -224,9 +247,9 @@
         "location": "court-yard",
         "verb": "open",
         "flag": "!front-door-opened",
-        "text": "KEY 2 The key slides into the lock and on turning it, the door swings open with a loud squeeeeek!",
+        "text": "The key slides into the lock and on turning it, the door swings open with a loud squeeeeek!",
         "noun": "door",
-        "carry": "key",
+        "carry": "door-key",
         "type": "set"
       }
     },

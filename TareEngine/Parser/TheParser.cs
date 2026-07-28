@@ -50,7 +50,7 @@
             if (tokens.Count(w => w is InvalidWord) > 0) return ParserResult.Error;
 
             if (tokens.Count == 0) return ParserResult.Error;
-            if (tokens.Count == 1) return _engine.PatternMatch(tokens[0], null);
+            if (tokens.Count == 1) return _engine.PatternMatch(tokens[0], NoWord.Instance);
 
             if (tokens.Count >= 0 && tokens.Count <= 2)
             {

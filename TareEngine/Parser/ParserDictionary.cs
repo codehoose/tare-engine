@@ -6,6 +6,7 @@
         public WordCollection<VerbWord> Verbs { get; set; } = new();
         public WordCollection<NounWord> Nouns { get; set; } = new();
         public WordCollection<FillerWord> Fillers { get; set; } = new();
+        public WordCollection<MetaWord> Metas { get; set; } = new();
 
         public IEnumerable<Word> GetEnumerator() => Directions.Concat(Verbs).Concat(Nouns).Concat(Fillers);
 
@@ -15,6 +16,7 @@
             typeof(VerbWord),
             typeof(NounWord),
             typeof(FillerWord),
+            typeof(MetaWord)
         };
 
         public Word FindWord(string word)
@@ -30,6 +32,9 @@
 
             var filler = Fillers.Find(word);
             if (filler != null) return filler;
+
+            var meta = Metas.Find(word);
+            if (meta != null) return meta;
 
             return new InvalidWord(word);
         }

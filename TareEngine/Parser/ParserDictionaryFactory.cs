@@ -40,6 +40,10 @@
             dictionary.Fillers.Add(new FillerWord("the"));
             dictionary.Fillers.Add(new FillerWord("a"));
 
+            // Meta words. Used in conditions to specify no word or any word
+            dictionary.Metas.Add(new MetaWord("-")); // No word
+            dictionary.Metas.Add(new MetaWord("*")); // Any word
+
             return dictionary;
         }
     }

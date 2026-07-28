@@ -4,7 +4,7 @@
     {
         public bool IsMatch(Word word)
         {
-            return word == null;            
+            return word == null || word.Primary == NoWord.Instance.Primary;            
         }
     }
 }

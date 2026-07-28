@@ -7,6 +7,7 @@
         public string verb;
         public string noun;
         public string text;
+        public string blockedText;
         public string carry;
         public string flag;
         public string type;

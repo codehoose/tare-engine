@@ -43,8 +43,9 @@ namespace TareEngine
             LastError = "";
             LastMessage = "";
 
-            List<Word> tokens = new List<Word>();
-            ParserResult result = _parser.Parse(input, out tokens);
+            List<Word> rawTokens = new List<Word>();
+            ParserResult result = _parser.Parse(input, out rawTokens);
+            var tokens = rawTokens.Where(t => t is { }).ToList();
 
             // Run through preconditions
             if (_flags.TryGetPreCondition(tokens, out var preCondition))
@@ -236,7 +237,18 @@ namespace TareEngine
             {
                 if (direction != null)
                 {
-                    LastError = _flags.GetBlockedText(direction.Blocked) ?? "You can't go that way!";
+                    var conditions = _flags.GetConditions(direction.Blocked);
+                    string? blockedText = null;
+                    foreach (var c in conditions)
+                    {
+                        if (c.IsMatch(words))
+                        {
+                            blockedText = c.BlockedText;
+                            break;
+                        }
+                    }
+
+                    LastError = blockedText ?? "You can't go that way!";
                 }
                 else
                 {
