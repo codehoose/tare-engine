@@ -18,11 +18,27 @@
          This is also the element Phase 6 will apply the zoom/pan
          RenderTransform to, so it's the right "canvas space" reference both
          now (identity) and later. -->
-    <Grid x:Name="CanvasRoot" Background="#FFEAEAEA" ClipToBounds="True"
-          MouseLeftButtonDown="CanvasRoot_MouseLeftButtonDown">
+    <Grid x:Name="CanvasRoot" Background="#FFEAEAEA" ClipToBounds="True" Focusable="True"
+          MouseLeftButtonDown="CanvasRoot_MouseLeftButtonDown"
+          MouseWheel="CanvasRoot_MouseWheel"
+          MouseDown="CanvasRoot_MouseDown"
+          MouseMove="CanvasRoot_MouseMove"
+          MouseUp="CanvasRoot_MouseUp">
 
-        <!-- Exit connection lines, beneath the room nodes. -->
-        <ItemsControl ItemsSource="{Binding AllExits}">
+        <!-- Content grid receives the scale+translate render transform so
+             only the visual items are transformed, not the outer canvas
+             element itself (prevents parent scroll viewers from reacting
+             to zoom changes). -->
+        <Grid x:Name="Content">
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="{Binding Zoom}" ScaleY="{Binding Zoom}" />
+                    <TranslateTransform X="{Binding PanX}" Y="{Binding PanY}" />
+                </TransformGroup>
+            </Grid.RenderTransform>
+
+            <!-- Exit connection lines, beneath the room nodes. -->
+            <ItemsControl ItemsSource="{Binding AllExits}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas />
@@ -71,10 +87,10 @@
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>
+            </ItemsControl>
 
-        <!-- Room nodes. -->
-        <ItemsControl ItemsSource="{Binding Rooms}">
+            <!-- Room nodes. -->
+            <ItemsControl ItemsSource="{Binding Rooms}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas />
@@ -91,10 +107,10 @@
                     <views:RoomNodeControl />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>
+            </ItemsControl>
 
-        <!-- Rubber-band line while dragging a new connection from a port. -->
-        <Path IsHitTestVisible="False" Stroke="#FF3070E0" StrokeThickness="2" StrokeDashArray="4 2">
+            <!-- Rubber-band line while dragging a new connection from a port. -->
+            <Path IsHitTestVisible="False" Stroke="#FF3070E0" StrokeThickness="2" StrokeDashArray="4 2">
             <Path.Data>
                 <MultiBinding Converter="{StaticResource PendingConnectionConverter}">
                     <Binding Path="IsConnectingExit" />
@@ -103,6 +119,7 @@
                     <Binding Path="PendingConnectionEnd" />
                 </MultiBinding>
             </Path.Data>
-        </Path>
+            </Path>
+        </Grid>
     </Grid>
 </UserControl>

@@ -13,12 +13,13 @@ namespace TareEditor.Views
         private double _dragStartX;
         private double _dragStartY;
 
-        // The ancestor Grid (named "CanvasRoot" in MapCanvasView.xaml) that
-        // Phase 6 will apply the zoom/pan RenderTransform to. Measuring mouse
-        // positions relative to it - rather than to the window - means every
-        // position here is already correct canvas-space, both now (identity)
-        // and once that transform is real, with no coordinate math to redo.
+        // The ancestor Grid (named "CanvasRoot" in MapCanvasView.xaml) and
+        // the inner Content grid that actually receives the RenderTransform.
+        // We measure mouse positions relative to CanvasRoot and then map
+        // through Content.RenderTransform to get content-space coordinates
+        // (the untransformed model-space used for X/Y layout).
         private FrameworkElement? _canvasRoot;
+        private FrameworkElement? _contentRoot;
 
         public RoomNodeControl()
         {
@@ -47,8 +48,9 @@ namespace TareEditor.Views
 
             FindOwningMap()?.SelectRoom(Room);
             _canvasRoot = this.FindAncestorByName("CanvasRoot");
+            _contentRoot = this.FindAncestorByName("Content");
 
-            _dragStartMouse = e.GetPosition(_canvasRoot);
+            _dragStartMouse = TransformToContent(e.GetPosition(_canvasRoot));
             _dragStartX = Room.X;
             _dragStartY = Room.Y;
 
@@ -61,7 +63,7 @@ namespace TareEditor.Views
             if (_dragStartMouse == null || Room == null) return;
             if (e.LeftButton != MouseButtonState.Pressed) return;
 
-            var current = e.GetPosition(_canvasRoot);
+            var current = TransformToContent(e.GetPosition(_canvasRoot));
             Room.X = _dragStartX + (current.X - _dragStartMouse.Value.X);
             Room.Y = _dragStartY + (current.Y - _dragStartMouse.Value.Y);
         }
@@ -85,7 +87,8 @@ namespace TareEditor.Views
             if (map == null) return;
 
             _canvasRoot = this.FindAncestorByName("CanvasRoot");
-            map.BeginConnectionDrag(Room, direction, e.GetPosition(_canvasRoot));
+            _contentRoot = this.FindAncestorByName("Content");
+            map.BeginConnectionDrag(Room, direction, TransformToContent(e.GetPosition(_canvasRoot)));
 
             Mouse.Capture(portElement);
             e.Handled = true;
@@ -96,7 +99,7 @@ namespace TareEditor.Views
             if (e.LeftButton != MouseButtonState.Pressed) return;
             if (FindOwningMap() is not { IsConnectingExit: true } map) return;
 
-            map.UpdateConnectionDrag(e.GetPosition(_canvasRoot));
+            map.UpdateConnectionDrag(TransformToContent(e.GetPosition(_canvasRoot)));
         }
 
         private void Port_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -104,7 +107,7 @@ namespace TareEditor.Views
             var map = FindOwningMap();
             if (map is { IsConnectingExit: true })
             {
-                var target = HitTestRoom(e.GetPosition(_canvasRoot));
+                var target = HitTestRoom(TransformToContent(e.GetPosition(_canvasRoot)));
                 map.CompleteConnectionDrag(target);
             }
 
@@ -122,11 +125,15 @@ namespace TareEditor.Views
         // regardless of mouse capture - used to resolve a connection-drag
         // drop target. Any port (or the body) of the target node counts;
         // the data model has no notion of *which* port received the drop.
-        private RoomViewModel? HitTestRoom(Point canvasPosition)
+        private RoomViewModel? HitTestRoom(Point contentPosition)
         {
-            if (_canvasRoot == null) return null;
+            // Perform hit testing against the visual tree rooted at the
+            // Content grid, since that's where the room nodes are rendered
+            // and where the RenderTransform is applied.
+            var root = _contentRoot ?? _canvasRoot;
+            if (root == null) return null;
 
-            DependencyObject? node = VisualTreeHelper.HitTest(_canvasRoot, canvasPosition)?.VisualHit;
+            DependencyObject? node = VisualTreeHelper.HitTest(root, contentPosition)?.VisualHit;
             while (node != null)
             {
                 if (node is FrameworkElement { DataContext: RoomViewModel room })
@@ -136,6 +143,25 @@ namespace TareEditor.Views
             }
 
             return null;
+        }
+
+        private Point TransformToContent(Point? canvasRootPoint)
+        {
+            if (canvasRootPoint == null) return new Point(0, 0);
+            var pt = canvasRootPoint.Value;
+
+            if (_contentRoot == null) return pt;
+
+            var tg = _contentRoot.RenderTransform as TransformGroup;
+            var matrix = tg?.Value ?? Matrix.Identity;
+            if (matrix.HasInverse)
+            {
+                var inv = matrix;
+                inv.Invert();
+                return inv.Transform(pt);
+            }
+
+            return pt;
         }
 
         // RoomNodeControl's own DataContext is its RoomViewModel, not the
