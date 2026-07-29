@@ -323,5 +323,9 @@
       "words": [ "-", "Direction" ],
       "action": "ShowError"
     }
-  ]
+  ],
+  "condActions": {
+    "pre": [],
+    "post": []
+  }
 }

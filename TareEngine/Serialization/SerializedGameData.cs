@@ -7,5 +7,6 @@
         public SerializedFlag[] flags;
         public SerializedItem[] items;
         public SerializedAction[] actions;
+        public CondActions condActions;
     }
 }

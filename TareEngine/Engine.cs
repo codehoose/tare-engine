@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using TareEngine.Flags;
+using TareEngine.Flags.Tasks;
 using TareEngine.Models;
 using TareEngine.Parser;
 using TareEngine.Parser.Matches;
@@ -15,6 +16,8 @@ namespace TareEngine
         private readonly List<Item> _items = new();
         private readonly List<IMatchAction> _actions = new();
         private readonly List<Item> _inventory = new();
+        private readonly List<IConditionAction> _preCondAct = new();
+        private readonly List<IConditionAction> _postCondAct = new();
         private GameFlags _flags;
 
         public TheParser Parser => _parser;
@@ -36,6 +39,7 @@ namespace TareEngine
             LoadItems(gameData.items);
             LoadFlags(gameData.flags);
             LoadActions(gameData.actions);
+            LoadCondActions(gameData.condActions);
         }
 
         public ParserResult Parse(string input)
@@ -46,6 +50,14 @@ namespace TareEngine
             List<Word> rawTokens = new List<Word>();
             ParserResult result = _parser.Parse(input, out rawTokens);
             var tokens = rawTokens.Where(t => t is { }).ToList();
+
+            foreach (var pre in _preCondAct)
+            {
+                if (pre.IsMatch(tokens))
+                {
+                    pre.Action();
+                }
+            }
 
             // Run through preconditions
             if (_flags.TryGetPreCondition(tokens, out var preCondition))
@@ -75,6 +87,14 @@ namespace TareEngine
                         sb.AppendLine(a);
                     }
                     LastMessage = sb.ToString().Trim();
+                }
+            }
+
+            foreach (var post in _postCondAct)
+            {
+                if (post.IsMatch(tokens))
+                {
+                    post.Action();
                 }
             }
 
@@ -122,6 +142,65 @@ namespace TareEngine
                 _actions.Add(new MatchAction(first, second, func));
             }
         }
+
+        private void LoadCondActions(CondActions actions)
+        {
+            LoadCondActions(actions.pre, _preCondAct);
+            LoadCondActions(actions.post, _postCondAct);
+        }
+
+        private void LoadCondActions(SerializedFlagSet[] conds, List<IConditionAction> condacts)
+        {
+            Action tasks = null;
+
+            foreach (var set in conds)
+            {
+                if (set.tasks != null && set.tasks.Length > 0)
+                {
+                    foreach (var t in set.tasks)
+                    {
+                        switch (t.type)
+                        {
+                            case "drop":
+                                tasks += new DropItemTask(this, t.argument).Do;
+                                break;
+                        }
+                    }
+                }
+
+
+                Action action = null;
+
+                if (tasks != null) action += tasks;
+
+                List<IFlagCondition> conditions = new List<IFlagCondition>();
+                if (!string.IsNullOrEmpty(set.location)) conditions.Add(new LocationCondition(set.location, this));
+                if (!string.IsNullOrEmpty(set.verb)) conditions.Add(new WordMatchCondition(Parser.Dictionary.FindWord(set.verb)));
+                if (!string.IsNullOrEmpty(set.noun)) conditions.Add(new WordMatchCondition(Parser.Dictionary.FindWord(set.noun)));
+                if (!string.IsNullOrEmpty(set.carry)) conditions.Add(new CarryCondition(set.carry, this));
+                if (!string.IsNullOrEmpty(set.flag)) AddFlagCondition(conditions, set.flag);
+
+                var cond = new FlaglessConditionAction(set.text, set.blockedText, conditions, action);
+                condacts.Add(cond);
+            }
+        }
+        
+
+        private void AddFlagCondition(List<IFlagCondition> conditions, string flag)
+        {
+            bool isNotSetTest = flag.StartsWith('!');
+            string flagName = isNotSetTest ? flag.Substring(1) : flag;
+
+            if (isNotSetTest)
+            {
+                conditions.Add(new FlagConditionNotSet(Flags, flagName));
+            }
+            else
+            {
+                conditions.Add(new FlagConditionSet(Flags, flagName));
+            }
+        }
+
 
         private IMatch GetMatch(string word)
         {
