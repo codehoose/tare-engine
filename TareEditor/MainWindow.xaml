@@ -8,12 +8,36 @@
         mc:Ignorable="d"
         Title="TareEditor" Height="600" Width="900">
     <DockPanel>
-        <!-- Placeholder toolbar - Phase 7 replaces this with the real menu/toolbar
-             (New/Open/Save/Import/Export). Kept here only so Phase 4's node
-             canvas is reachable for manual testing before then. -->
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="4">
-            <Button Content="Add Room" Padding="8,2" Command="{Binding CurrentMap.AddRoomCommand}" />
-        </StackPanel>
+        <DockPanel.InputBindings>
+            <KeyBinding Command="{x:Static local:MainWindow.NewCommand}" Gesture="Ctrl+N" />
+            <KeyBinding Command="{x:Static local:MainWindow.OpenCommand}" Gesture="Ctrl+O" />
+            <KeyBinding Command="{x:Static local:MainWindow.SaveCommand}" Gesture="Ctrl+S" />
+            <KeyBinding Command="{x:Static local:MainWindow.SaveAsCommand}" Gesture="Ctrl+Shift+S" />
+            <KeyBinding Command="{x:Static local:MainWindow.ImportCommand}" Gesture="Ctrl+I" />
+            <KeyBinding Command="{x:Static local:MainWindow.ExportCommand}" Gesture="Ctrl+E" />
+        </DockPanel.InputBindings>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="New" Click="NewMenuItem_Click" />
+                <MenuItem Header="Open..." Click="OpenMenuItem_Click" />
+                <Separator />
+                <MenuItem Header="Save" Click="SaveMenuItem_Click" />
+                <MenuItem Header="Save As..." Click="SaveAsMenuItem_Click" />
+                <Separator />
+                <MenuItem Header="Import Engine JSON..." Click="ImportMenuItem_Click" />
+                <MenuItem Header="Export Engine JSON..." Click="ExportMenuItem_Click" />
+                <Separator />
+                <MenuItem Header="Exit" Click="ExitMenuItem_Click" InputGestureText="Alt+F4" />
+            </MenuItem>
+        </Menu>
+
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Content="Add Room" Padding="8,2" Command="{Binding CurrentMap.AddRoomCommand}" />
+                <Button Content="Save" Padding="8,2" Click="SaveMenuItem_Click" />
+                <Button Content="Export" Padding="8,2" Click="ExportMenuItem_Click" />
+            </ToolBar>
+        </ToolBarTray>
 
         <views:MapCanvasView DataContext="{Binding CurrentMap}" />
     </DockPanel>
