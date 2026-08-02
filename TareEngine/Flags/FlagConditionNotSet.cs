@@ -1,7 +1,7 @@
-﻿using TareEngine.Parser;
-
-namespace TareEngine.Flags
+﻿namespace TareEngine.Flags
 {
+    using TareEngine.Parser;
+
     public class FlagConditionNotSet : IFlagCondition
     {
         private readonly GameFlags _flags;

@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-
-namespace TareEngine.Serialization
+﻿namespace TareEngine.Serialization
 {
+    using Newtonsoft.Json;
+
     internal static class RoomsSerializer
     {
         private static readonly string Content = nameof(Content);

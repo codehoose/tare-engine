@@ -1,7 +1,7 @@
-﻿using TareEngine.Parser;
-
-namespace TareEngine.Flags
+﻿namespace TareEngine.Flags
 {
+    using TareEngine.Parser;
+
     public interface IConditionAction
     {
         public Action Action { get; }

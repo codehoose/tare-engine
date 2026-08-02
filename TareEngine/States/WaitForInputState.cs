@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TareEngine.States
+﻿namespace TareEngine.States
 {
     public class WaitForInputState : IState<IAdventureGame>
     {
@@ -18,8 +14,6 @@ namespace TareEngine.States
 
         public void Exit(IStateMachine<IAdventureGame> fsm)
         {
-            //var keyboard = _game.GetComponent<KeyboardBufferComponent>();
-            //keyboard.Enabled = false;
             fsm.Game.ToggleKeyboard(false);
         }
 

@@ -1,7 +1,6 @@
-﻿using TareEngine.Parser;
-
-namespace TareEngine.Models
+﻿namespace TareEngine.Models
 {
+    using TareEngine.Parser;
     public class Item
     {
         public string Slug { get; }
@@ -20,17 +19,22 @@ namespace TareEngine.Models
             Examine = examine;
             Name = name;
 
-            if (words?.Count == 1)
+            if (words?.Count >= 1)
             {
-                Word = new NounWord(words[0]);
+                var word = words[0];
+                var secondary = Array.Empty<string>();
+
+                if (words?.Count >= 2)
+                {
+                    secondary = new string[words.Count - 1];
+                    string[] src = words.ToArray();
+                    Array.Copy(src, 1, secondary, 0, words.Count - 1);
+                }
+                Word = new NounWord(word, secondary);
             }
-            else if (words?.Count > 1)
+            else
             {
-                string firstWord = words[0];
-                string[] sub = new string[words.Count - 1];
-                string[] src = words.ToArray();
-                Array.Copy(src, 1, sub, 0, words.Count - 1);
-                Word = new NounWord(firstWord, sub);
+                throw new ArgumentException($"'{nameof(words)}' parameter must contain at least one entry");
             }
 
             Flags = ObjectFlags.None;

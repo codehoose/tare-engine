@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-
-namespace TareEngine.Serialization
+﻿namespace TareEngine.Serialization
 {
+    using Newtonsoft.Json;
+
     public class GameDataSerializer
     {
         private static readonly string Content = nameof(Content);

@@ -1,9 +1,9 @@
-﻿using TareEngine.Flags.Tasks;
-using TareEngine.Parser;
-using TareEngine.Serialization;
-
-namespace TareEngine.Flags
+﻿namespace TareEngine.Flags
 {
+    using TareEngine.Flags.Tasks;
+    using TareEngine.Parser;
+    using TareEngine.Serialization;
+
     public class GameFlags
     {
         public static readonly string PlayerMoveCount = "!moves";
@@ -55,7 +55,7 @@ namespace TareEngine.Flags
             return actions;
         }
 
-        public bool TryGetPreCondition(IEnumerable<Word> words, out IConditionAction condition)
+        public bool TryGetPreCondition(IEnumerable<Word> words, out IConditionAction? condition)
         {
             condition = null;
             foreach (var cond in _preConditions)
@@ -66,11 +66,12 @@ namespace TareEngine.Flags
             return condition is not null;
         }
 
-        public GameFlags(Engine engine, SerializedFlag[] flags)
+        public GameFlags(Engine engine)
         {
             _engine = engine;
-            LoadFlags(flags);
         }
+
+        public void Set(SerializedFlag[] flags) => LoadFlags(flags);
 
         private void LoadFlags(SerializedFlag[] flags)
         {
@@ -87,7 +88,7 @@ namespace TareEngine.Flags
 
         private void AddConditions(string slug, SerializedFlagSet[] conds)
         {
-            Action tasks = null;
+            Action? tasks = null;
 
             foreach (var set in conds)
             {
@@ -105,9 +106,9 @@ namespace TareEngine.Flags
                 }
 
 
-                Action action = null;
+                Action? action = null;
                 var type = string.IsNullOrEmpty(set.type) ? "set" : set.type;
-                switch (set.type)
+                switch (type)
                 {
                     case "set":
                         action = () => _flags[slug] = 1;
@@ -117,7 +118,9 @@ namespace TareEngine.Flags
                         break;
                 }
 
-                if (tasks != null) action += tasks;
+                // ensure a non-null Action to pass to ConditionAction
+                Action finalAction = action ?? (() => { });
+                if (tasks != null) finalAction += tasks;
 
                 List<IFlagCondition> conditions = new List<IFlagCondition>();
                 if (!string.IsNullOrEmpty(set.location)) conditions.Add(new LocationCondition(set.location, _engine));
@@ -126,7 +129,7 @@ namespace TareEngine.Flags
                 if (!string.IsNullOrEmpty(set.carry)) conditions.Add(new CarryCondition(set.carry, _engine));
                 if (!string.IsNullOrEmpty(set.flag)) AddFlagCondition(conditions, set.flag);
 
-                var cond = new ConditionAction(slug, set.text, set.blockedText, conditions, action);
+                var cond = new ConditionAction(slug, set.text, set.blockedText, conditions, finalAction);
                 if (set.when == "pre")
                 {
                     _preConditions.Add(cond);

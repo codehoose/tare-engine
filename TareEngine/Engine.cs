@@ -1,13 +1,13 @@
-﻿using System.Text;
-using TareEngine.Flags;
-using TareEngine.Flags.Tasks;
-using TareEngine.Models;
-using TareEngine.Parser;
-using TareEngine.Parser.Matches;
-using TareEngine.Serialization;
-
-namespace TareEngine
+﻿namespace TareEngine
 {
+    using System.Text;
+    using TareEngine.Flags;
+    using TareEngine.Flags.Tasks;
+    using TareEngine.Models;
+    using TareEngine.Parser;
+    using TareEngine.Parser.Matches;
+    using TareEngine.Serialization;
+
     public class Engine
     {
         private readonly TheParser _parser;
@@ -21,20 +21,21 @@ namespace TareEngine
         private GameFlags _flags;
 
         public TheParser Parser => _parser;
-        public Room CurrentRoom { get; private set; }
-        public string LastMessage { get; private set; }
-        public string LastError { get; private set; }
+        public Room CurrentRoom { get; private set; } = Room.Empty;
+        public string LastMessage { get; private set; } = "";
+        public string LastError { get; private set; } = "";
         public IList<Item> Inventory => _inventory;
         public GameFlags Flags => _flags;
 
         public Engine()
         {
             _parser = new TheParser(this);
+            _flags = new GameFlags(this);
         }
 
         public void Init()
         {
-            var gameData = GameDataSerializer.GetData("thedata.json");
+            var gameData = GameDataSerializer.GetData("thedata.json") ?? throw new InvalidDataException("Game data could not be loaded. Please check the file and try again.");
             LoadRooms(gameData.rooms);
             LoadItems(gameData.items);
             LoadFlags(gameData.flags);
@@ -119,7 +120,7 @@ namespace TareEngine
 
         private void LoadFlags(SerializedFlag[] flags)
         {
-            _flags = new GameFlags(this, flags);
+            _flags.Set(flags);
         }
 
         private void LoadActions(SerializedAction[] actions)
@@ -136,8 +137,11 @@ namespace TareEngine
 
             foreach (var action in actions)
             {
-                IMatch first = GetMatch(action.words[0]);
-                IMatch second = GetMatch(action.words[1]);
+                var first = GetMatch(action.words[0]);
+                var second = GetMatch(action.words[1]);
+
+                if (first is null || second is null) continue;
+
                 Func<IEnumerable<Word>, ParserResult> func = GetFunction(action.action);
                 _actions.Add(new MatchAction(first, second, func));
             }
@@ -151,7 +155,7 @@ namespace TareEngine
 
         private void LoadCondActions(SerializedFlagSet[] conds, List<IConditionAction> condacts)
         {
-            Action tasks = null;
+            Action? tasks = null;
 
             foreach (var set in conds)
             {
@@ -169,7 +173,7 @@ namespace TareEngine
                 }
 
 
-                Action action = null;
+                Action? action = null;
 
                 if (tasks != null) action += tasks;
 
@@ -202,12 +206,13 @@ namespace TareEngine
         }
 
 
-        private IMatch GetMatch(string word)
+        private IMatch? GetMatch(string word)
         {
             if (word.StartsWith("!"))
             {
                 return new SpecificWordMatch(_parser.FindWord(word.Substring(1)));
-            }else if (word == "-")
+            }
+            else if (word == "-")
             {
                 return new NullWorldMatch();
             }
@@ -215,8 +220,20 @@ namespace TareEngine
             {
                 Type wordTypeMatch = typeof(WordTypeMatch<>);
                 Type genericArgument = _parser.Dictionary.WordTypes.FirstOrDefault(w => w.Name == word + "Word");
-                Type instantiableType = wordTypeMatch.MakeGenericType(new Type[] { genericArgument });
-                return (IMatch)Activator.CreateInstance(instantiableType);
+                if (genericArgument == null)
+                {
+                    throw new TypeInitializationException($"Word type '{word}' not found", new Exception($"Word type '{word}' not found"));
+                }
+
+                try
+                {
+                    Type instantiableType = wordTypeMatch.MakeGenericType(new Type[] { genericArgument });
+                    return Activator.CreateInstance(instantiableType) as IMatch;
+                }
+                catch (Exception e)
+                {
+                    throw new TypeInitializationException($"Word type '{word}' could not be instantiated", e);
+                }
             }
         }
 
@@ -287,7 +304,7 @@ namespace TareEngine
             var noun = words.FirstOrDefault(w => w is NounWord);
             if (noun == null)
             {
-                LastError = $"I don't know how to open {noun.Primary}!";
+                LastError = $"I don't know how to open that!";
                 return ParserResult.Error;
             }
 
@@ -331,7 +348,7 @@ namespace TareEngine
                 }
                 else
                 {
-                    LastError = $"You can't go {directionWord.Primary.ToLower()}.";
+                    LastError = $"You can't go that way!";
                 }
                 return ParserResult.Error;
             }
@@ -351,10 +368,18 @@ namespace TareEngine
         private ParserResult DropItem(IEnumerable<Word> words)
         {
             var noun = words.FirstOrDefault(w => w is NounWord);
+            if (noun == null)
+            {
+                LastError = "I don't know that word";
+                return ParserResult.Error;
+            }
+
             if (_inventory.Count(i => noun == i.Word) > 0)
             {
-                LastMessage = $"You drop {noun.Primary}.";
                 var item = _inventory.FirstOrDefault(i => noun == i.Word);
+
+                LastMessage = $"You drop {noun.Primary}.";
+                
                 _inventory.Remove(item);
                 CurrentRoom.Items.Add(item);
                 return ParserResult.ShowLastMessage;

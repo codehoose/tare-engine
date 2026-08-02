@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
-
-namespace TareEngine.Serialization
+﻿namespace TareEngine.Serialization
 {
+    using Newtonsoft.Json;
+
     [Serializable]
     public class SerializedRoom
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string slug;
         [JsonProperty("short")]
         public string shortname;
@@ -13,5 +14,6 @@ namespace TareEngine.Serialization
         public string graphicFlag;
         public Dictionary<string, string> exits;
         public Dictionary<string, string> blockers;
+#pragma warning restore CS8618
     }
 }

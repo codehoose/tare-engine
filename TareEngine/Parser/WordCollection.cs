@@ -1,7 +1,7 @@
-﻿using System.Collections;
-
-namespace TareEngine.Parser
+﻿namespace TareEngine.Parser
 {
+    using System.Collections;
+
     public class WordCollection<T> : IEnumerable<Word> where T: Word
     {
         public static string NotFound = nameof(NotFound);

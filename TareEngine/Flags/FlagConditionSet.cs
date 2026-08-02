@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using TareEngine.Parser;
-
-namespace TareEngine.Flags
+﻿namespace TareEngine.Flags
 {
+    using TareEngine.Parser;
+
     public class FlagConditionSet : IFlagCondition
     {
         private readonly GameFlags _flags;
