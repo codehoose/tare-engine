@@ -4,7 +4,7 @@
 
     public interface IConditionAction
     {
-        public Action Action { get; }
+        public Action? Action { get; }
         public string Text { get; }
         public string BlockedText { get; }
         public string Slug { get; }

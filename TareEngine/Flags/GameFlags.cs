@@ -47,7 +47,7 @@
             {
                 if (cond.IsMatch(words))
                 {
-                    cond.Action();
+                    cond.Action?.Invoke();
                     actions.Add(cond);
                 }
             }

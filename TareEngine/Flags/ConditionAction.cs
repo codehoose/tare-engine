@@ -6,14 +6,14 @@
     {
         private IEnumerable<IFlagCondition> _conditions;
 
-        public Action Action { get; }
+        public Action? Action { get; }
 
         public string Text { get; }
         public string BlockedText { get; }
 
         public string Slug { get; }
 
-        public ConditionAction(string slug, string text, string blockedText, IEnumerable<IFlagCondition> conditions, Action action)
+        public ConditionAction(string slug, string text, string blockedText, IEnumerable<IFlagCondition> conditions, Action? action)
         {
             Slug = slug; 
             Text = text;

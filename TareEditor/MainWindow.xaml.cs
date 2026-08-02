@@ -25,12 +25,12 @@ namespace TareEditor
             base.OnSourceInitialized(e);
 
             // Wire command bindings for the routed commands used by keyboard shortcuts
-            CommandBindings.Add(new System.Windows.Input.CommandBinding(NewCommand, (s, a) => NewMenuItem_Click(s, null)));
-            CommandBindings.Add(new System.Windows.Input.CommandBinding(OpenCommand, (s, a) => OpenMenuItem_Click(s, null)));
-            CommandBindings.Add(new System.Windows.Input.CommandBinding(SaveCommand, (s, a) => SaveMenuItem_Click(s, null)));
-            CommandBindings.Add(new System.Windows.Input.CommandBinding(SaveAsCommand, (s, a) => SaveAsMenuItem_Click(s, null)));
-            CommandBindings.Add(new System.Windows.Input.CommandBinding(ImportCommand, (s, a) => ImportMenuItem_Click(s, null)));
-            CommandBindings.Add(new System.Windows.Input.CommandBinding(ExportCommand, (s, a) => ExportMenuItem_Click(s, null)));
+            CommandBindings.Add(new System.Windows.Input.CommandBinding(NewCommand, (s, a) => NewMenuItem_Click(s, a)));
+            CommandBindings.Add(new System.Windows.Input.CommandBinding(OpenCommand, (s, a) => OpenMenuItem_Click(s, a)));
+            CommandBindings.Add(new System.Windows.Input.CommandBinding(SaveCommand, (s, a) => SaveMenuItem_Click(s, a)));
+            CommandBindings.Add(new System.Windows.Input.CommandBinding(SaveAsCommand, (s, a) => SaveAsMenuItem_Click(s, a)));
+            CommandBindings.Add(new System.Windows.Input.CommandBinding(ImportCommand, (s, a) => ImportMenuItem_Click(s, a)));
+            CommandBindings.Add(new System.Windows.Input.CommandBinding(ExportCommand, (s, a) => ExportMenuItem_Click(s, a)));
         }
 
         private void NewMenuItem_Click(object sender, RoutedEventArgs e)

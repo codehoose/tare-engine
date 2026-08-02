@@ -1,6 +1,7 @@
 ﻿namespace TareEngine
 {
     using System.Text;
+    using TareEngine.Exceptions;
     using TareEngine.Flags;
     using TareEngine.Flags.Tasks;
     using TareEngine.Models;
@@ -56,7 +57,7 @@
             {
                 if (pre.IsMatch(tokens))
                 {
-                    pre.Action();
+                    pre.Action?.Invoke();
                 }
             }
 
@@ -65,7 +66,7 @@
             {
                 if (preCondition != null)
                 {
-                    preCondition.Action();
+                    preCondition.Action?.Invoke();
                     LastMessage = preCondition.Text;
                     _flags.Increment(GameFlags.PlayerMoveCount);
                     return result;
@@ -95,7 +96,7 @@
             {
                 if (post.IsMatch(tokens))
                 {
-                    post.Action();
+                    post.Action?.Invoke();
                 }
             }
 
@@ -115,7 +116,9 @@
                 _rooms.Add(room.Slug, room);
             }
 
-            CurrentRoom = string.IsNullOrEmpty(rooms.startRoom) ? _rooms.Values.FirstOrDefault() : _rooms[rooms.startRoom];
+            CurrentRoom = string.IsNullOrEmpty(rooms.startRoom)
+                ? _rooms.Values.FirstOrDefault() ?? Room.Empty
+                : _rooms.ContainsKey(rooms.startRoom) ? _rooms[rooms.startRoom] : Room.Empty;
         }
 
         private void LoadFlags(SerializedFlag[] flags)
@@ -219,7 +222,7 @@
             else
             {
                 Type wordTypeMatch = typeof(WordTypeMatch<>);
-                Type genericArgument = _parser.Dictionary.WordTypes.FirstOrDefault(w => w.Name == word + "Word");
+                Type? genericArgument = _parser.Dictionary.WordTypes.FirstOrDefault(w => w.Name == word + "Word");
                 if (genericArgument == null)
                 {
                     throw new TypeInitializationException($"Word type '{word}' not found", new Exception($"Word type '{word}' not found"));
@@ -265,9 +268,13 @@
             foreach (var exit in exits)
             {
                 if (room.blockers == null) break;
-                var blocked = room.blockers.Keys.Select(k => k.Equals(exit.Exit.Primary, System.StringComparison.OrdinalIgnoreCase) ? room.blockers[k] : null)
-                    .Where(s => s != null).ToList();
-                if (blocked.Count() == 1)
+                var blocked = room.blockers.Keys
+                    .Select(k => k.Equals(exit.Exit.Primary, StringComparison.OrdinalIgnoreCase) ? room.blockers[k] : null)
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Select(s => s!) // null-forgiving after filtering out null/empty
+                    .ToList();
+
+                if (blocked.Count == 1 && !string.IsNullOrEmpty(blocked[0]))
                 {
                     exit.Blocked = blocked[0];
                 }
@@ -275,11 +282,22 @@
             return new Room(room.shortname, room.description, room.slug, room.graphic, room.graphicFlag, exits);
         }
 
-        internal bool FlagNonZero(string flag) => _flags.IsTruthy(flag);
+        internal bool FlagNonZero(string? flag)
+        {
+            // If there's no block flag configured for the exit, the exit is available.
+            if (string.IsNullOrEmpty(flag)) return true;
+            return _flags.IsTruthy(flag);
+        }
 
         internal Item GetItem(string itemSlug)
         {
-            return _items.FirstOrDefault(i => i.Slug == itemSlug);
+            var item = _items.FirstOrDefault(i => i.Slug == itemSlug);
+            if (item == null)
+            {
+                throw new ItemNotFoundException($"Item with slug '{itemSlug}' not found");
+            }
+
+            return item;
         }
 
         public string[] GetExits()
@@ -377,6 +395,11 @@
             if (_inventory.Count(i => noun == i.Word) > 0)
             {
                 var item = _inventory.FirstOrDefault(i => noun == i.Word);
+                if (item == null)
+                {
+                    LastError = $"You're not carrying {noun.Primary}.";
+                    return ParserResult.Error;
+                }
 
                 LastMessage = $"You drop {noun.Primary}.";
                 

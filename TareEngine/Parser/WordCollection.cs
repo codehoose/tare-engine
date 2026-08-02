@@ -1,6 +1,7 @@
 ﻿namespace TareEngine.Parser
 {
     using System.Collections;
+    using TareEngine.Exceptions;
 
     public class WordCollection<T> : IEnumerable<Word> where T: Word
     {
@@ -20,7 +21,12 @@
 
         public Word Find(string word)
         {
-            return _word.FirstOrDefault(w => w.IsMatch(word));
+            var foundWord = _word.FirstOrDefault(w => w.IsMatch(word));
+            if (foundWord == null)
+            {
+                throw new WordNotFoundException($"Word '{word}' not found");
+            }
+            return foundWord;
         }
 
         public IEnumerator<Word> GetEnumerator()
