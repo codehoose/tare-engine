@@ -7,6 +7,7 @@
     using System.Linq;
     using TareEngine;
     using TareEngine.Models;
+    using TareEngine.Serialization;
     using TareEngine.States;
     using TareMonoGameBridge.Components;
     using TareMonoGameBridge.Graphics;
@@ -16,6 +17,7 @@
         private Texture2D _graphic;
         private Point _graphicPos;
         private GraphicsDeviceManager _graphics;
+        private readonly IGameDataSerializer _gameDataSerializer;
         private Engine _engine;
         private SpriteBatch _spriteBatch;
         private KeyboardBufferComponent _keyboard;
@@ -51,9 +53,10 @@
             _keyboard = AddComponent<KeyboardBufferComponent>();
         }
 
-        public AdventureGame()
+        public AdventureGame(IGameDataSerializer gameDataSerializer)
         {
             _graphics = new GraphicsDeviceManager(this);
+            _gameDataSerializer = gameDataSerializer;
             StateMachine = new StateMachine(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -110,7 +113,7 @@
             SetupTerminal();
 
             _engine = new Engine();
-            _engine.Init();
+            _engine.Init(_gameDataSerializer);
         }
 
         private void SetupTerminal()

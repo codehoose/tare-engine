@@ -19,15 +19,7 @@
             return found != null;
         }
 
-        public Word Find(string word)
-        {
-            var foundWord = _word.FirstOrDefault(w => w.IsMatch(word));
-            if (foundWord == null)
-            {
-                throw new WordNotFoundException($"Word '{word}' not found");
-            }
-            return foundWord;
-        }
+        public Word? Find(string word) => _word.FirstOrDefault(w => w.IsMatch(word));
 
         public IEnumerator<Word> GetEnumerator()
         {

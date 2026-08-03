@@ -34,9 +34,9 @@
             _flags = new GameFlags(this);
         }
 
-        public void Init()
+        public void Init(IGameDataSerializer gameDataSerializer)
         {
-            var gameData = GameDataSerializer.GetData("thedata.json") ?? throw new InvalidDataException("Game data could not be loaded. Please check the file and try again.");
+            var gameData = gameDataSerializer.GetData("thedata.json") ?? throw new InvalidDataException("Game data could not be loaded. Please check the file and try again.");
             LoadRooms(gameData.rooms);
             LoadItems(gameData.items);
             LoadFlags(gameData.flags);

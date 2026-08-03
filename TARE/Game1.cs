@@ -14,6 +14,10 @@ namespace TARE
         const int SCREEN_WIDTH = SCREEN_COLS * FONT_WIDTH;
         const int SCREEN_HEIGHT = SCREEN_ROWS * FONT_HEIGHT;
 
+        public Game1() : base(new TareEngine.Serialization.GameDataSerializer())
+        {
+        }
+
         protected override void Initialize()
         {
             _config = new AdventureGameConfig

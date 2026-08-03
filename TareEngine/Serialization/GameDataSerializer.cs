@@ -2,17 +2,17 @@
 {
     using Newtonsoft.Json;
 
-    public class GameDataSerializer
+    public class GameDataSerializer : IGameDataSerializer
     {
         private static readonly string Content = nameof(Content);
 
-        public static SerializedGameData? GetData(string jsonFile)
+        public SerializedGameData? GetData(string jsonFile)
         {
             var path = Path.Combine(Content, jsonFile);
             return GetDataFullPath(path);
         }
 
-        public static SerializedGameData? GetDataFullPath(string jsonFile)
+        public SerializedGameData? GetDataFullPath(string jsonFile)
         {
             var json = File.ReadAllText(jsonFile);
             return JsonConvert.DeserializeObject<SerializedGameData>(json);
