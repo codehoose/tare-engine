@@ -1,0 +1,87 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\TareEngine\Engine.cs" Link="Engine.cs" />
+    <Compile Include="..\..\..\TareEngine\Exceptions\ItemNotFoundException.cs" Link="Exceptions\ItemNotFoundException.cs" />
+    <Compile Include="..\..\..\TareEngine\Exceptions\WordNotFoundException.cs" Link="Exceptions\WordNotFoundException.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\CarryCondition.cs" Link="Flags\CarryCondition.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\ConditionAction.cs" Link="Flags\ConditionAction.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\FlagConditionNotSet.cs" Link="Flags\FlagConditionNotSet.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\FlagConditionSet.cs" Link="Flags\FlagConditionSet.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\FlaglessConditionAction.cs" Link="Flags\FlaglessConditionAction.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\GameFlags.cs" Link="Flags\GameFlags.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\IConditionAction.cs" Link="Flags\IConditionAction.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\IFlagCondition.cs" Link="Flags\IFlagCondition.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\LocationCondition.cs" Link="Flags\LocationCondition.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\Tasks\DropItemTask.cs" Link="Flags\Tasks\DropItemTask.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\Tasks\IActionTask.cs" Link="Flags\Tasks\IActionTask.cs" />
+    <Compile Include="..\..\..\TareEngine\Flags\WordMatchCondition.cs" Link="Flags\WordMatchCondition.cs" />
+    <Compile Include="..\..\..\TareEngine\IAdventureGame.cs" Link="IAdventureGame.cs" />
+    <Compile Include="..\..\..\TareEngine\Models\Item.cs" Link="Models\Item.cs" />
+    <Compile Include="..\..\..\TareEngine\Models\ObjectFlags.cs" Link="Models\ObjectFlags.cs" />
+    <Compile Include="..\..\..\TareEngine\Models\Room.cs" Link="Models\Room.cs" />
+    <Compile Include="..\..\..\TareEngine\Models\RoomExit.cs" Link="Models\RoomExit.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\AnyWord.cs" Link="Parser\AnyWord.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\DirectionWord.cs" Link="Parser\DirectionWord.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\FillerWord.cs" Link="Parser\FillerWord.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\InvalidWord.cs" Link="Parser\InvalidWord.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\Matches\IMatch.cs" Link="Parser\Matches\IMatch.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\Matches\IMatchAction.cs" Link="Parser\Matches\IMatchAction.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\Matches\MatchAction.cs" Link="Parser\Matches\MatchAction.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\Matches\NullWorldMatch.cs" Link="Parser\Matches\NullWorldMatch.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\Matches\SpecificWordMatch.cs" Link="Parser\Matches\SpecificWordMatch.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\Matches\WordTypeMatch.cs" Link="Parser\Matches\WordTypeMatch.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\MetaWord.cs" Link="Parser\MetaWord.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\NounWord.cs" Link="Parser\NounWord.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\NoWord.cs" Link="Parser\NoWord.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\ParserDictionary.cs" Link="Parser\ParserDictionary.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\ParserDictionaryFactory.cs" Link="Parser\ParserDictionaryFactory.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\ParserResult.cs" Link="Parser\ParserResult.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\TheParser.cs" Link="Parser\TheParser.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\UnknownWord.cs" Link="Parser\UnknownWord.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\VerbWord.cs" Link="Parser\VerbWord.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\Word.cs" Link="Parser\Word.cs" />
+    <Compile Include="..\..\..\TareEngine\Parser\WordCollection.cs" Link="Parser\WordCollection.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\CondActions.cs" Link="Serialization\CondActions.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\GameDataSerializer.cs" Link="Serialization\GameDataSerializer.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\IGameDataSerializer.cs" Link="Serialization\IGameDataSerializer.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\RoomsSerializer.cs" Link="Serialization\RoomsSerializer.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\SerializedAction.cs" Link="Serialization\SerializedAction.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\SerializedFlag.cs" Link="Serialization\SerializedFlag.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\SerializedFlagSet.cs" Link="Serialization\SerializedFlagSet.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\SerializedFlagTask.cs" Link="Serialization\SerializedFlagTask.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\SerializedGameData.cs" Link="Serialization\SerializedGameData.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\SerializedItem.cs" Link="Serialization\SerializedItem.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\SerializedRoom.cs" Link="Serialization\SerializedRoom.cs" />
+    <Compile Include="..\..\..\TareEngine\Serialization\SerializedRoomCollection.cs" Link="Serialization\SerializedRoomCollection.cs" />
+    <Compile Include="..\..\..\TareEngine\States\ChangeRoomState.cs" Link="States\ChangeRoomState.cs" />
+    <Compile Include="..\..\..\TareEngine\States\DescribeRoomBaseState.cs" Link="States\DescribeRoomBaseState.cs" />
+    <Compile Include="..\..\..\TareEngine\States\DescribeRoomState.cs" Link="States\DescribeRoomState.cs" />
+    <Compile Include="..\..\..\TareEngine\States\DescribeWithLookRoomState.cs" Link="States\DescribeWithLookRoomState.cs" />
+    <Compile Include="..\..\..\TareEngine\States\InitGameState.cs" Link="States\InitGameState.cs" />
+    <Compile Include="..\..\..\TareEngine\States\IState.cs" Link="States\IState.cs" />
+    <Compile Include="..\..\..\TareEngine\States\IStateMachine.cs" Link="States\IStateMachine.cs" />
+    <Compile Include="..\..\..\TareEngine\States\StateMachine.cs" Link="States\StateMachine.cs" />
+    <Compile Include="..\..\..\TareEngine\States\WaitForInputState.cs" Link="States\WaitForInputState.cs" />
+    <Compile Include="..\..\..\TareEngine\TareGameState.cs" Link="TareGameState.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+    <Folder Include="Flags\Tasks\" />
+    <Folder Include="Models\" />
+    <Folder Include="Parser\Matches\" />
+    <Folder Include="States\" />
+    <Folder Include="Serialization\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+</Project>

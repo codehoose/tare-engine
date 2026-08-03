@@ -3,3 +3,8 @@
 **/obj/
 **/Temp/
 **/bin/
+**/Library/
+**/Logs/
+Unity/*.sln
+Unity/*.csproj
+Unity/.idea
