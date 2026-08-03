@@ -3,15 +3,18 @@
     using TareEngine.Flags.Tasks;
     using TareEngine.Parser;
     using TareEngine.Serialization;
+    using System.Collections.Generic;
+    using System;
+    using System.Linq;
 
     public class GameFlags
     {
         public static readonly string PlayerMoveCount = "!moves";
 
-        private readonly Dictionary<string, int> _flags = new();
+        private readonly Dictionary<string, int> _flags = new Dictionary<string, int>();
         private readonly Engine _engine;
-        private readonly List<IConditionAction> _preConditions = new();
-        private readonly List<IConditionAction> _setConditions = new();
+        private readonly List<IConditionAction> _preConditions = new List<IConditionAction>();
+        private readonly List<IConditionAction> _setConditions = new List<IConditionAction>();
 
         public void Increment(string flag)
         {
@@ -63,7 +66,7 @@
                 if (cond.IsMatch(words)) condition = cond;
             }
 
-            return condition is not null;
+            return condition != null;
         }
 
         public GameFlags(Engine engine)

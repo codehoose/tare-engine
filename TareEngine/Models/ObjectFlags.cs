@@ -1,5 +1,7 @@
 ﻿namespace TareEngine.Models
 {
+    using System;
+
     [Flags]
     public enum ObjectFlags
     {

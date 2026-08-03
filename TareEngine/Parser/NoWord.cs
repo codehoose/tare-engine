@@ -2,12 +2,14 @@
 {
     public class NoWord : MetaWord
     {
+        private static NoWord _instance;
+
         public static NoWord Instance
         {
             get
             {
-                if (field == null) field = new NoWord();
-                return field;
+                if (_instance == null) _instance = new NoWord();
+                return _instance;
             }
         }
 

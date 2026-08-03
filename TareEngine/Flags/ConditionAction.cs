@@ -1,6 +1,8 @@
 ﻿namespace TareEngine.Flags
 {
     using TareEngine.Parser;
+    using System.Collections.Generic;
+    using System;
 
     public class ConditionAction : IConditionAction
     {

@@ -1,7 +1,8 @@
 ﻿namespace TareEngine.Parser
 {
     using System.Collections;
-    using TareEngine.Exceptions;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class WordCollection<T> : IEnumerable<Word> where T: Word
     {

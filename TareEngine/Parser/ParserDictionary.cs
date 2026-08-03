@@ -1,12 +1,16 @@
 ﻿namespace TareEngine.Parser
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class ParserDictionary
     {
-        public WordCollection<DirectionWord> Directions { get; set; } = new();
-        public WordCollection<VerbWord> Verbs { get; set; } = new();
-        public WordCollection<NounWord> Nouns { get; set; } = new();
-        public WordCollection<FillerWord> Fillers { get; set; } = new();
-        public WordCollection<MetaWord> Metas { get; set; } = new();
+        public WordCollection<DirectionWord> Directions { get; set; } = new WordCollection<DirectionWord>();
+        public WordCollection<VerbWord> Verbs { get; set; } = new WordCollection<VerbWord>();
+        public WordCollection<NounWord> Nouns { get; set; } = new WordCollection<NounWord>();
+        public WordCollection<FillerWord> Fillers { get; set; } = new WordCollection<FillerWord>();
+        public WordCollection<MetaWord> Metas { get; set; } = new WordCollection<MetaWord>();
 
         public IEnumerable<Word> GetEnumerator() => Directions.Concat(Verbs).Concat(Nouns).Concat(Fillers);
 

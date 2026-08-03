@@ -1,5 +1,8 @@
 ﻿namespace TareEngine.Parser
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class TheParser
     {
         private readonly ParserDictionary _dictionary;
@@ -24,7 +27,7 @@
         {
             // Tokenize the input and remove the filler words like 'the' and 'a'
             var words = input.Split(" ", System.StringSplitOptions.RemoveEmptyEntries)
-                              .Where(w => _dictionary.FindWord(w) is not FillerWord)
+                              .Where(w => !(_dictionary.FindWord(w) is FillerWord))
                               .ToList();
 
             // find the double words
@@ -34,7 +37,7 @@
                 if (index == words.Count) break;
                 var tmp = index < words.Count - 1 ? $"{words[index]} {words[index + 1]}" : words[index];
                 var word = _dictionary.FindWord(tmp);
-                if (word != null && word is not InvalidWord)
+                if (word != null && !(word is InvalidWord))
                 {
                     if (index < words.Count) words.RemoveAt(index);
                     if (index < words.Count) words.RemoveAt(index);

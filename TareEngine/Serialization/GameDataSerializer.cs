@@ -1,6 +1,7 @@
 ﻿namespace TareEngine.Serialization
 {
     using Newtonsoft.Json;
+    using System.IO;
 
     public class GameDataSerializer : IGameDataSerializer
     {

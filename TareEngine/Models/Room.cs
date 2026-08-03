@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TareEngine.Models
+﻿namespace TareEngine.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     public class Room
     {
         public static Room Empty = new Room("Empty", "An empty room.", "empty", Array.Empty<string>(), "", Array.Empty<RoomExit>());

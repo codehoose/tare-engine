@@ -1,6 +1,7 @@
 ﻿namespace TareEngine.Flags
 {
     using TareEngine.Parser;
+    using System.Collections.Generic;
 
     public class LocationCondition : IFlagCondition
     {

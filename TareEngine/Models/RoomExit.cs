@@ -1,7 +1,7 @@
-﻿using TareEngine.Parser;
-
-namespace TareEngine.Models
+﻿namespace TareEngine.Models
 {
+    using TareEngine.Parser;
+
     public class RoomExit
     {
         public Word Exit { get; }

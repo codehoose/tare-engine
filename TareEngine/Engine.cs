@@ -1,6 +1,10 @@
 ﻿namespace TareEngine
 {
+    using System.Collections.Generic;
     using System.Text;
+    using System.IO;
+    using System;
+    using System.Linq;
     using TareEngine.Exceptions;
     using TareEngine.Flags;
     using TareEngine.Flags.Tasks;
@@ -12,13 +16,13 @@
     public class Engine
     {
         private readonly TheParser _parser;
-        private readonly Dictionary<string, Room> _rooms = new();
-        private readonly Dictionary<string, Func<IEnumerable<Word>, ParserResult>> _methods = new();
-        private readonly List<Item> _items = new();
-        private readonly List<IMatchAction> _actions = new();
-        private readonly List<Item> _inventory = new();
-        private readonly List<IConditionAction> _preCondAct = new();
-        private readonly List<IConditionAction> _postCondAct = new();
+        private readonly Dictionary<string, Room> _rooms = new Dictionary<string, Room>();
+        private readonly Dictionary<string, Func<IEnumerable<Word>, ParserResult>> _methods = new Dictionary<string, Func<IEnumerable<Word>, ParserResult>>();
+        private readonly List<Item> _items = new List<Item>();
+        private readonly List<IMatchAction> _actions = new List<IMatchAction>();
+        private readonly List<Item> _inventory = new List<Item>();
+        private readonly List<IConditionAction> _preCondAct = new List<IConditionAction>();
+        private readonly List<IConditionAction> _postCondAct = new List<IConditionAction>();
         private GameFlags _flags;
 
         public TheParser Parser => _parser;

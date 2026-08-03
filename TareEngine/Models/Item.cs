@@ -1,6 +1,9 @@
 ﻿namespace TareEngine.Models
 {
     using TareEngine.Parser;
+    using System.Collections.Generic;
+    using System;
+
     public class Item
     {
         public string Slug { get; }

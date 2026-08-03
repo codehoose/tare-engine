@@ -1,5 +1,7 @@
 ﻿namespace TareEngine.Serialization
 {
+    using System;
+
     [Serializable]
     public class CondActions
     {
