@@ -114,6 +114,7 @@
 
             _engine = new Engine();
             _engine.Init(_gameDataSerializer);
+            StateMachine.EnterState(InitGameState.Instance);
         }
 
         private void SetupTerminal()

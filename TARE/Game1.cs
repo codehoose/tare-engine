@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using TareEngine.States;
-using TareMonoGameBridge;
+﻿using TareMonoGameBridge;
 
 namespace TARE
 {
@@ -36,19 +33,9 @@ namespace TARE
         protected override void LoadContent()
         {
             base.LoadContent();
-
-            StateMachine.EnterState(InitGameState.Instance);
             Graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             Graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
             Graphics.ApplyChanges();
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            base.Update(gameTime);
         }
     }
 }
