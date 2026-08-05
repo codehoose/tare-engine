@@ -8,3 +8,25 @@
 Unity/*.sln
 Unity/*.csproj
 Unity/.idea
+
+# Godot 4+ specific ignores
+Godot/godot-adventure/.godot/
+
+# Godot-specific ignores
+Godot/godot-adventure/.import/
+Godot/godot-adventure/export.cfg
+Godot/godot-adventure/export_presets.cfg
+
+# Imported translations (automatically generated from CSV files)
+**/*.translation
+
+# Mono-specific ignores
+Godot/godot-adventure/.mono/
+Godot/godot-adventure/data_*/
+Godot/godot-adventure/mono_crash.*.json
+
+# IntelliJ / Rider
+Godot/godot-adventure/.idea
+
+#macOS
+Godot/godot-adventure/.DS_Store

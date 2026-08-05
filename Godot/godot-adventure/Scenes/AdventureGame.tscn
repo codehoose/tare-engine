@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://pb5gdhpy04cg"]
+
+[ext_resource type="Script" uid="uid://cvamcefudg3gr" path="res://TARE/GodotAdventureGame.cs" id="1_03cxj"]
+
+[node name="Node2D" type="Node2D" unique_id=2057165944]
+
+[node name="AdventureGameNode" type="Node2D" parent="." unique_id=314181854 node_paths=PackedStringArray("roomDescription", "roomPicture", "commandText")]
+script = ExtResource("1_03cxj")
+roomDescription = NodePath("RoomDescription")
+roomPicture = NodePath("RoomPicture")
+commandText = NodePath("CommandInput")
+
+[node name="RoomDescription" type="RichTextLabel" parent="AdventureGameNode" unique_id=1294496614]
+offset_left = 1.0
+offset_top = 319.0
+offset_right = 1153.0
+offset_bottom = 601.0
+text = "This is some text..."
+scroll_following_visible_characters = true
+
+[node name="RoomPicture" type="TextureRect" parent="AdventureGameNode" unique_id=1592878104]
+offset_right = 1154.0
+offset_bottom = 317.0
+
+[node name="CommandInput" type="LineEdit" parent="AdventureGameNode" unique_id=1029441305]
+offset_left = 4.0
+offset_top = 609.0
+offset_right = 1151.0
+offset_bottom = 640.0
+placeholder_text = "What next..?"
+keep_editing_on_text_submit = true
